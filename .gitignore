@@ -1,0 +1,10 @@
+build_*/
+lib/
+**/bin/
+
+*.swp
+*.exe
+*.ii
+*.s
+*.o
+
