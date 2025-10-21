@@ -1,11 +1,12 @@
 #include "aio.hpp"
 #include <iostream>
 
-using namespace std;
-
-void personal::outV(int* a, int n) {
-        for (int i = 0; i < n; i++)
-                cout << a[i] << ' ';
-        cout << "\n";
+void personal::coutArray(int* array, const int size) 
+{
+        for (int i = 0; i < size; i++) 
+        { 
+            std::cout << array[i] << ' ';
+        }
+        std::cout << "\n";
 }
 

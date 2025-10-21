@@ -2,19 +2,23 @@
 #include "sorts.hpp"
 #include <iostream> 
 
-using namespace std;
+int main() 
+{
+        std::cout << "Введите размер массива для сортировки: " << std::endl;
+        int size; std::cin >> size;
 
-int main() {
-        int n; cin >> n;
-        int* a = new int[n];
+        int* array = new int[size];
         int temp;
         
-        for (int i = 0; i < n; i++) {
-            cin >> temp;
-            a[i] = temp;
+        std::cout << "Введите через пробел элементы массива: " << std::endl;
+        for (int i = 0; i < size; i++) 
+        {
+            std::cin >> temp;
+            array[i] = temp;
         }
-
-        personal::outV(a, n);
-        personal::sorts::shell_sort(a, n);
-        personal::outV(a, n);
+        
+        personal::sorts::shellSort(array, size);
+        
+        std::cout << "Отсортированный массив: " << std::endl;
+        personal::coutArray(array, size);
 }

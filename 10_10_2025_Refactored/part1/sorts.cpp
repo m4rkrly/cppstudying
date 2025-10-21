@@ -1,17 +1,19 @@
 #include "sorts.hpp"
 
-using namespace std;
-
-void personal::sorts::shell_sort(int* a, int n) {
+void personal::sorts::shellSort(int* array, const int size) {
     int temp;
-    for (int step = n/2; step > 0; step /= 2) {
-        for (int j = 0; j + step < n; j++) {
-            for (int i = j + step; i-step >= 0; i -= step) {
-                if (a[i] < a[i-step]) {
-                   temp = a[i];
-                   a[i] = a[i-step];
-                   a[i-step] = temp;
-                   }
+    for (int step = size/2; step > 0; step /= 2) 
+    {
+        for (int j = 0; j + step < size; j++) 
+        {
+            for (int i = j + step; i-step >= 0; i -= step) 
+            {
+                if (array[i] < array[i-step])
+                {
+                    temp = array[i];
+                    array[i] = array[i-step];
+                    array[i-step] = temp;
+                }
             }
         }
     }

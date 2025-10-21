@@ -1,8 +1,9 @@
 #ifndef AIO_HPP
 #define AIO_HPP
 
-namespace personal {
-        void outV(int* a, int n);
+namespace personal 
+{
+        void coutArray(int* array, const int size);
 }
 
 #endif
