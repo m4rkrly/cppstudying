@@ -1,6 +1,6 @@
 #include "sorts.hpp"
 
-void personal::sorts::shellSort(int* array, const int size) {
+void ktr::sorts::shellSort(int* arr, const int size) {
     int temp;
     for (int step = size/2; step > 0; step /= 2) 
     {
@@ -8,11 +8,11 @@ void personal::sorts::shellSort(int* array, const int size) {
         {
             for (int i = j + step; i-step >= 0; i -= step) 
             {
-                if (array[i] < array[i-step])
+                if (arr[i] < arr[i-step])
                 {
-                    temp = array[i];
-                    array[i] = array[i-step];
-                    array[i-step] = temp;
+                    temp = arr[i];
+                    arr[i] = arr[i-step];
+                    arr[i-step] = temp;
                 }
             }
         }

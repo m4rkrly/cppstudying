@@ -1,9 +1,9 @@
 #ifndef AIO_HPP
 #define AIO_HPP
 
-namespace personal 
+namespace ktr
 {
-        void coutArray(int* array, const int size);
+        void coutArray(int* arr, const int size);
 }
 
 #endif

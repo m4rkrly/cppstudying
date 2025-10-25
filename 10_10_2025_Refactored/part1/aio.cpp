@@ -1,11 +1,11 @@
 #include "aio.hpp"
 #include <iostream>
 
-void personal::coutArray(int* array, const int size) 
+void ktr::coutArray(int* arr, const int size) 
 {
         for (int i = 0; i < size; i++) 
         { 
-            std::cout << array[i] << ' ';
+            std::cout << arr[i] << ' ';
         }
         std::cout << "\n";
 }

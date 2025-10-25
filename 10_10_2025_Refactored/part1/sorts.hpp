@@ -1,11 +1,11 @@
 #ifndef SORTS_HPP
 #define SORTS_HPP
 
-namespace personal 
+namespace ktr
 {
         namespace sorts 
         {
-                void shellSort(int* array, const int size); 
+                void shellSort(int* arr, const int size); 
         }
 }
 
