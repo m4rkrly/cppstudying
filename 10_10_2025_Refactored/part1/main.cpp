@@ -1,11 +1,13 @@
+#include <iostream> 
+
 #include "aio.hpp"
 #include "sorts.hpp"
-#include <iostream> 
 
 int main() 
 {
         std::cout << "Введите размер массива для сортировки: " << std::endl;
-        int size; std::cin >> size;
+        int size; 
+        std::cin >> size;
 
         int* arr = new int[size];
         int temp;
