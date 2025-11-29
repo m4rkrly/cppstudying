@@ -24,29 +24,40 @@ const tkr::MenuItem* tkr::exit(const MenuItem* current) {
 	std::exit(0);
 }
 
-
-const tkr::MenuItem* tkr::studySum(const MenuItem* current) {
-	std::cout << current-> text << std::endl << std::endl;
-	return current->parent;
-}
-
-const tkr::MenuItem* tkr::studySubt(const MenuItem* current) {
-	std::cout << current-> text << std::endl << std::endl;
-	return current->parent;
-}
-
-const tkr::MenuItem* tkr::studyMult(const MenuItem* current) {
-	std::cout << current-> text << std::endl << std::endl;
-	return current->parent;
-}
-
-const tkr::MenuItem* tkr::studyDiv(const MenuItem* current) {
-	std::cout << current-> text << std::endl << std::endl;
-	return current->parent;
-}
-
-const tkr::MenuItem* tkr::studyGoBack(const MenuItem* current) {
+const tkr::MenuItem* tkr::goBack(const MenuItem* current) {
 	std::cout << current-> text << std::endl << std::endl;
 	return current->parent->parent;
+
 }
 
+// ALGEBRA
+const tkr::MenuItem* tkr::algebraSum(const MenuItem* current) {
+	std::cout << current-> text << std::endl << std::endl;
+	return current->parent;
+}
+
+const tkr::MenuItem* tkr::algebraSubt(const MenuItem* current) {
+	std::cout << current-> text << std::endl << std::endl;
+	return current->parent;
+}
+
+const tkr::MenuItem* tkr::algebraMult(const MenuItem* current) {
+	std::cout << current-> text << std::endl << std::endl;
+	return current->parent;
+}
+
+const tkr::MenuItem* tkr::algebraDiv(const MenuItem* current) {
+	std::cout << current-> text << std::endl << std::endl;
+	return current->parent;
+}
+
+// MATHANALYSIS
+const tkr::MenuItem* tkr::mathanDiff(const MenuItem* current) {
+	std::cout << current-> text << std::endl << std::endl;
+	return current->parent;
+}
+
+const tkr::MenuItem* tkr::mathanInter(const MenuItem* current) {
+	std::cout << current-> text << std::endl << std::endl;
+	return current->parent;
+}
