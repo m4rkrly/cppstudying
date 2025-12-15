@@ -1,6 +1,9 @@
+#include <vector>
+
 #include "sorts.hpp"
 
-void tkr::bubbleSort(int* arr, const int size) {
+void tkr::bubbleSort(std::vector<int>& arr) {
+	const int size = arr.size();
 	int temp;
 	for (int i = 0; i < size; i++) {
 		for (int j = i + 1; j < size; j++) {
