@@ -307,7 +307,26 @@ TEST(Arithmetics, Multiplication) {
 }
 
 TEST(Arithmetics, Division) {
+	//tkr::LongNumber a = "124";
+	//tkr::LongNumber b = "2";
+	//tkr::LongNumber answ = "62";
+
+	//ASSERT_EQ(a / b, answ);
+
+	//a = "-891";
+	//b = "91"; 
+	//answ = "-9";
+	//ASSERT_EQ(a / b, answ);
+
+	//a = "-95619";
+	//b = "-142";
+	//answ = "673";
+	//ASSERT_EQ(a / b, answ);
 	
+	//a = "-125";
+	//b = "2";
+	//answ = "-125";
+	//ASSERT_EQ((a/b)*b + (a%b), answ);
 }
 
 int main(int argc, char **argv) {

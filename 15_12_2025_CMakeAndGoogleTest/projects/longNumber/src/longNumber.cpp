@@ -51,34 +51,65 @@ int* LongNumber::getNumbers(const int* ptr, const int length) const noexcept {
 	numbers -= length;
 	return numbers;
 }
-int compare(const LongNumber& l, const LongNumber& r, bool checkSign = true) {
-	if (l.getSign() > r.getSign() && checkSign == true) {
-		return -1;
-	} else if (l.getSign() < r.getSign() && checkSign == true) {
-		return 1;
+
+//	 NEW
+int compare(const LongNumber& l, const LongNumber& r, const bool absolute = false) {
+	int result = 0;
+	int sign = 1;
+	if (l.getSign() == r.getSign() and absolute == false) {
+		sign = l.getSign();
+	} else if (absolute == false) {
+		return (l.getSign() > r.getSign()) ? -1 : 1; 
 	}
-		
+
 	if (l.getLength() > r.getLength()) {
-		return -1;
+		return -1 * sign;
 	} else if (l.getLength() < r.getLength()) {
-		return 1;
+		return 1 * sign;
 	}
 	
-	const int sign = l.getSign();
-	const int length = l.getLength();
-	const int* numbersL = l.getNumbers(); 
-	const int* numbersR = r.getNumbers(); 
+	int length = l.getLength();
+	int* numbersL = l.getNumbers();
+	int* numbersR = r.getNumbers();
 
-	for (int i = 0; i < length; i++) {
-		if (*numbersL > *numbersR) {
-			return -1 * ((checkSign == true) ? sign : 1);
-		} else if (*numbersL < *numbersR) {
-			return 1 * ((checkSign == true) ? sign : 1);
+	for (int i = length - 1; i >= 0; i--) {
+		if (numbersL[i] > numbersR[i]) {
+			return -1 * sign;
+		} else if (numbersL[i] < numbersR[i]) {
+			return 1 * sign;
 		}
-		numbersL++; numbersR++;
 	}
 	return 0;
 }
+
+// OLD
+//int compare(const LongNumber& l, const LongNumber& r, bool checkSign = true) {
+//	if (l.getSign() > r.getSign() && checkSign == true) {
+//		return -1;
+//	} else if (l.getSign() < r.getSign() && checkSign == true) {
+//		return 1;
+//	}
+//		
+//	if (l.getLength() > r.getLength()) {
+//		return -1;
+//	} else if (l.getLength() < r.getLength()) {
+//		return 1;
+//	}
+//	
+//	const int sign = (checkSign == true) ? l.getSign() : 1;
+//	const int length = l.getLength();
+//	const int* numbersL = l.getNumbers(); 
+//	const int* numbersR = r.getNumbers(); 
+//
+//	for (int i = length - 1; i >= 0; i--) {
+//		if (numbersL[i] > numbersR[i]) {
+//			return -sign; 
+//		} else if (numbersL[i] < numbersR[i]) {
+//			return sign; 
+//		}
+//	}
+//	return 0;
+//}
 
 LongNumber::LongNumber() {
 	sign = 1;
@@ -100,7 +131,6 @@ LongNumber::LongNumber(const char* const str) {
 	numbers = getNumbers(ptr, length);
 
 	ptr = nullptr; 
-	// TEMP
 }
 
 LongNumber::LongNumber(const LongNumber& x) {
@@ -166,7 +196,6 @@ LongNumber& LongNumber::operator = (LongNumber&& x) {
 	return *this;
  }
 
-
 bool LongNumber::operator == (const LongNumber& x) const {
 	return compare(*this, x) == 0;
 }
@@ -175,6 +204,7 @@ bool LongNumber::operator != (const LongNumber& x) const {
 	return compare(*this, x) != 0;
 }
 
+//TEMP
 bool LongNumber::operator > (const LongNumber& x) const {
 	return compare(*this, x) == -1;
 }
@@ -212,11 +242,16 @@ LongNumber LongNumber::summarize(const LongNumber& x, const LongNumber& y, const
 			result.length -= 1;
 		}
 	}
+	
+	if (result.length == 1 and numbersResult[0] == 0) {
+		result.sign = 1;
+	}
+
 
 	return result;
 }
 
-LongNumber LongNumber::subtract(const LongNumber& x, const LongNumber& y) const {
+LongNumber LongNumber::subtract(const LongNumber& x, const LongNumber& y, const int changeSign = 1) const {
 	int lengthX = x.length;
 	int* numbersX = x.numbers;
 	int lengthY = y.length;
@@ -245,36 +280,48 @@ LongNumber LongNumber::subtract(const LongNumber& x, const LongNumber& y) const 
 	while (numbersResult[result.length - 1] == 0 and result.length > 1) {
 		result.length -= 1;
 	}
+	
+	if (result.length == 1 and numbersResult[0] == 0) {
+		result.sign = 1;
+	}
 
+	if (changeSign == -1) {
+		result.sign = result.sign * changeSign;
+	}
+	
 	return result;
 }
 
 
 LongNumber LongNumber::operator + (const LongNumber& x) const {
-	if (this->sign == x.sign) {
-		return summarize(*this, x);
+	const LongNumber* max = this;
+	const LongNumber* min = &x;
+	if (compare(*max, *min, true) == 1) {
+		max = &x;
+		min = this;
+	}
+
+	if (max->sign == min->sign) {
+		return summarize(*max, *min);
 	} else {
-		if (compare(*this, x, false) == -1) {
-			LongNumber result = subtract(*this, x);
-			return result;
-		} else {
-			LongNumber result = subtract(x, *this);
-			return result;
-		}
-	} 
+		return subtract(*max, *min);
+	}
 }
 
 LongNumber LongNumber::operator - (const LongNumber& x) const {
-	if (this->sign == x.sign) {
-		return subtract(*this, x);
+	const LongNumber* max = this;
+	const LongNumber* min = &x;
+	int sign = 1;
+	if (compare(*max, *min, true) == 1) {
+		max = &x;
+		min = this;
+		if (max->sign == min->sign) { sign = -1; }
+	}
+
+	if (max->sign == min->sign) {
+		return subtract(*max, *min, sign);
 	} else {
-		if (compare(*this, x, false) == -1) {
-			LongNumber result = summarize(*this, x);
-			return result;
-		} else {
-			LongNumber result = summarize(x, *this);
-			return result;
-		}
+		return summarize(*max, *min);
 	}
 }
 
@@ -316,25 +363,20 @@ LongNumber LongNumber::operator * (const LongNumber& x) const {
 	for (int offset = 0; offset < lengthR; offset++) {
 		result = summarize(result, multiply(*this, x, offset), offset);
 	}
+	result.sign = signResult;
 	return result;
 }
 
 LongNumber div(const LongNumber& divided, const LongNumber& divisor) {
 	LongNumber q = "0";
-	LongNumber one = "1";
-	while	((divided - (divisor * q)) > divisor or (divided - (divisor * q)) == divisor) {
-		q = q + one;
+	while (compare(divided - (divisor * q), divisor) <= 0) {
+		q = q + "1";
 	}
 	return q;
 }
 
 LongNumber mod(const LongNumber& divided, const LongNumber& divisor) {
-	LongNumber q = "0";
-	LongNumber one = "1";
-	while	((divided - (divisor * q)) > divisor or (divided - (divisor * q)) == divisor) {
-		q = q + one;
-	}
-	return divided - (divisor * q);
+	return divided - (div(divided, divisor) * divisor);
 }
 
 LongNumber LongNumber::getDigit(const LongNumber& number, const int index) const {
@@ -345,26 +387,42 @@ LongNumber LongNumber::getDigit(const LongNumber& number, const int index) const
 
 
 LongNumber LongNumber::operator / (const LongNumber& x) const {
-	int length = this->length;
-	int i = length - 1;
-	LongNumber q;
-	LongNumber r;
-	LongNumber temp;
-	LongNumber result;
+	LongNumber divided(*this); divided.sign = 1;
+	LongNumber divider(x); divider.sign = 1;
 
+	int length = divided.length;
+	int i = length - 1;
+	int sign = this->sign * x.sign;
+	LongNumber q = "0";
+	LongNumber curDivided = "0";
+	LongNumber result = "0";
+	
 	while (i >= 0) {
-		while (temp < x and i >= 0) {	
-			temp = (temp * LongNumber("10")) + getDigit(*this, i);
+		while(compare(curDivided, divider) == 1 and i >= 0) {
+			curDivided = (curDivided * "10") + getDigit(divided, i);
 			i--;
 		}
-
-	return temp;
+		//printNumbers(curDivided.numbers, curDivided.length, curDivided.sign);	
+		q = (q * "10") + div(curDivided, divider);
+		curDivided = mod(curDivided, divider);
 	}
+
+	q.sign = sign;
+	LongNumber remn = *this - (q * x);
+	if (remn < LongNumber("0")) {
+		q.sign = 1;
+		q = q + "1";
+		q.sign = sign;
+	}
+	return q;
 }
 
 LongNumber LongNumber::operator % (const LongNumber& x) const {
-	return getDigit(*this, 1);
+	LongNumber result =  *this - ((*this / x) * x);
+	result.sign = 1; 
+	return result;
 }
+
 
 
 int LongNumber::getSign() const noexcept {
@@ -388,6 +446,13 @@ int* LongNumber::getNumbers() const noexcept {
 // ----------------------------------------------------------
 namespace tkr {
 	std::ostream& operator << (std::ostream &os, const LongNumber& x) {
-		// TODO
+		if (x.sign < 0) {
+			os << '-' << ' ';
+		}
+
+		for (int i = x.length - 1; i >= 0; i--) {
+			os << x.numbers[i] << ' ';
+		}
+		return os;
 	}
 }

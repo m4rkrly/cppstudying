@@ -45,7 +45,7 @@ namespace tkr {
 			int* getNumbers(const char* ptr, const int length) const noexcept;
 			int* getNumbers(const int* ptr, const int length) const noexcept; 
 			LongNumber summarize(const LongNumber& x, const LongNumber& y, const int offset = 0) const;
-			LongNumber subtract(const LongNumber& x, const LongNumber& y) const;
+			LongNumber subtract(const LongNumber& x, const LongNumber& y, const int changeSign) const;
 			LongNumber multiply(const LongNumber& x, const LongNumber& y, const int offset) const;
 			LongNumber getDigit(const LongNumber& number, const int index) const;
 	};

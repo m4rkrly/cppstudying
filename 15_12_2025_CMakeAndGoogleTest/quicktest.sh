@@ -1,4 +1,4 @@
 cd ./buildNinja
-ctest -V N 
+ctest -V N
 cd ..
 
