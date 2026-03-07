@@ -12,7 +12,7 @@ cd $BUILD_FOLDER
 cmake -G $BUILD_TYPE ../$SOURCE_FOLDER
 cmake --build .
 
-
+cp ../run_menu.sh ./menu/
 
 cp ../run_tests.sh .
 #cp ../$SOURCE_FOLDER/

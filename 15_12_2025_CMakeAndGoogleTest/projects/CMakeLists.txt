@@ -5,6 +5,7 @@ project(menu)
 enable_testing()
 add_subdirectory(lib/googletest)
 
+add_subdirectory(longNumber)
 add_subdirectory(sorts)
 add_subdirectory(menu)
 

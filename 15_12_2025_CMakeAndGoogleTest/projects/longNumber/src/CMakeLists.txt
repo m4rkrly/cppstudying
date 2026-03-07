@@ -1,8 +1,8 @@
 target_sources(${LIB_NAME}
 	PRIVATE
-		sorts.cpp
+		longNumber.cpp
 	PUBLIC
-		sorts.hpp
+		longNumber.hpp
 )
 
 target_include_directories(${LIB_NAME} PUBLIC

@@ -1,9 +1,8 @@
-set(LIB_NAME sort123123_lib)
+set(LIB_NAME longNumber)
 
-project(sorts)
+project(longNumber)
 
 add_library(${LIB_NAME} "")
 
 add_subdirectory(src)
 add_subdirectory(test)
-
