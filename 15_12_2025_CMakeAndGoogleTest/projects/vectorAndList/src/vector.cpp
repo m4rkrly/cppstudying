@@ -4,42 +4,33 @@
 
 using tkr::Vector;
 
-// Проверка текущего Capacity и его уменьшение/расширение
-void checkCapacity() {
-	// TODO
-}
-
-// Копирование массива для расширения capacity или insert
-// Возможно следует перегрузить для копирования с индекса
-template<typename T>
-T* copy() {
-	// TODO
-}
-
 // Конструктор
 template<typename T>
 Vector<T>::Vector() {
 	arr = new T[capacity]; 
 }
 
+// Деструктор
 template<typename T>
 Vector<T>::~Vector() {
-	delete arr[];
+	delete[] arr;
 	arr = nullptr;
 }
 
+// Получение количества элементов
 template<typename T>
 std::size_t Vector<T>::get_size() const noexcept {
 	return this->size;
 }
 
+// Проверить наличие элемента
 template<typename T>
 bool Vector<T>::has_item(const T& value) const noexcept {
 	for (int i = 0; i < size; i++) {
 		if (arr[i] == value) 
-			return True
+			return true;
 	}
-	return False
+	return false;
 }
 
 template<typename T>

@@ -5,5 +5,6 @@ target_sources(${CONTAINERS_LIB}
 )
 
 target_include_directories(${CONTAINERS_LIB} PUBLIC
-	${CURRENT_SOURCE_DIR}
+	"${PROJECT_SOURCE_DIR}/src"	
+	#${CURRENT_SOURCE_DIR}
 )

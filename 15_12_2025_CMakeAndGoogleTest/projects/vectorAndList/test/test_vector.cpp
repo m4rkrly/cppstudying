@@ -2,13 +2,20 @@
 
 #include "vector.hpp"
 
-using ::Vector;
-
-// Тесты TODO
+using tkr::Vector;
 
 // КОНСТРУКТОР И ДЕСТРУКТОР
 
+TEST(ConstructorAndDestructor, Default) {
+	tkr::Vector<int> a;
+	ASSERT_EQ(a.get_size(), 0)
+		<< "Некорректный размер вектора"
+		<< a.get_size();
+}
+
 // ВСТАВКА, ДОБАВЛЕНИЕ
+
+
 
 // УДАЛЕНИЕ
 

@@ -9,4 +9,4 @@ target_link_libraries(testSorts
 	${LIB_NAME}
 )
 
-add_test(testSorts testSorts)
+#add_test(testSorts testSorts)

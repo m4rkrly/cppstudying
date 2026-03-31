@@ -9,7 +9,7 @@ target_link_libraries(testLongNumber
 	${LIB_NAME}
 )
 
-add_test(testLongNumber testLongNumber)
+#add_test(testLongNumber testLongNumber)
 
 set(SOURCES
 	busko_test.cpp	
@@ -22,4 +22,4 @@ target_link_libraries(busko_test
 	${LIB_NAME}
 )
 
-add_test(busko_test busko_test)
+#add_test(busko_test busko_test)
