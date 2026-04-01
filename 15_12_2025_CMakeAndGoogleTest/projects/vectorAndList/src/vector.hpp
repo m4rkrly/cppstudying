@@ -24,5 +24,12 @@ namespace tkr {
 			void print() const noexcept;
 			void push_back(const T& value);
 			bool remove_first(const T& value);
+	
+		private:
+			void checkCapacity();
+			void copy(const T* oldArr, T* newArr, const std::size_t oldSize);
+			void connect(const std::size_t gapIndex);
+			void spread(const std::size_t gapIndex);
+			bool equal(const Vector& v2) const noexcept;
 	};
 }
