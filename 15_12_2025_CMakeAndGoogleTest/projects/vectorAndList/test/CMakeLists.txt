@@ -4,7 +4,7 @@ target_link_libraries(doubly_linked_list_tests
 	gtest 
 	${CONTAINERS_LIB}
 )
-#add_test(doubly_linked_list_tests doubly_linked_list_tests)
+add_test(doubly_linked_list_tests doubly_linked_list_tests)
 
 # vector test
 add_executable(vector_tests test_vector.cpp templates_vector.cpp)
