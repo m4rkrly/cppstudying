@@ -57,15 +57,15 @@ void InitObject(TObject *obj, float xPos, float yPos, float oWidth, float oHeigh
 	(*obj).horizSpeed = 0.2; 
 }
 
+bool IsCollision(TObject o1, TObject o2);
+void CreateLevel(int lvl);
+TObject* GetNewMoving();
+
 void PlayerDead() {
 	system("color 4F");
 	Sleep(500);
 	CreateLevel(level);
 }
-
-bool IsCollision(TObject o1, TObject o2);
-void CreateLevel(int lvl);
-TObject* GetNewMoving();
 
 void VertMoveObject(TObject *obj) {
 	(*obj).IsFly = true;
