@@ -57,6 +57,7 @@ void InitObject(TObject *obj, float xPos, float yPos, float oWidth, float oHeigh
 
 bool IsCollision(TObject o1, TObject o2);
 void CreateLevel(int lvl);
+TObject* GetNewMoving();
 
 void VertMoveObject(TObject *obj) {
 	(*obj).IsFly = true;
@@ -64,14 +65,23 @@ void VertMoveObject(TObject *obj) {
 	SetObjectPos(obj, (*obj).x, (*obj).y + (*obj).vertSpeed);
 	for (int i = 0; i < brickLength; i++) {	
 		if (IsCollision(*obj, brick[i])) {
+			if ((*obj).vertSpeed > 0)
+				(*obj).IsFly = false;
+
+			if ((brick[i].cType == '?') && ((*obj).vertSpeed < 0) && (obj == &mario)) {
+				brick[i].cType = '-';
+				InitObject(GetNewMoving(), brick[i].x, brick[i].y - 3, 3, 2, '$');
+			}
 			(*obj).y -= (*obj).vertSpeed;
 			(*obj).vertSpeed = 0;
 			(*obj).IsFly = false;
+			
 			if (brick[i].cType == '+') {
 				level += 1;
-				if (level > 2) level = 1;
+				if (level > 3) level = 1;
+				system("color 2F");
+				Sleep(500);
 				CreateLevel(level);
-				Sleep(1000);
 			}
 			break;
 		}
@@ -89,11 +99,13 @@ void HorizonMoveObject(TObject *obj) {
 			return;
 		}
 
-	TObject temp = *obj;
-	VertMoveObject(&temp);
-	if (temp.IsFly == TRUE) {
-		(*obj).x -= (*obj).horizSpeed;
-		(*obj).horizSpeed = -(*obj).horizSpeed;
+	if ((*obj).cType == 'o') {
+		TObject temp = *obj;
+		VertMoveObject(&temp);
+		if (temp.IsFly == TRUE) {
+			(*obj).x -= (*obj).horizSpeed;
+			(*obj).horizSpeed = -(*obj).horizSpeed;
+		}
 	}
 }
 
@@ -104,20 +116,29 @@ void DeleteMoving(int i) {
 }
 
 void MarioCollision() {
-	for (int i = 0; i < movingLength; i++) 
+	for (int i = 0; i < movingLength; i++) { 
 		if (IsCollision(mario, moving[i])) {
-			if ( (mario.IsFly == true) 
-				&& (mario.vertSpeed > 0)
-				&& (mario.y + mario.height < moving[i].y + moving[i].height * 0.5)
-			) {
+			if (moving[i].cType == 'o') {
+				if ( (mario.IsFly == true) 
+					&& (mario.vertSpeed > 0)
+					&& (mario.y + mario.height < moving[i].y + moving[i].height * 0.5)
+				) {
+					DeleteMoving(i);
+					i--;
+					continue;
+				} else
+					CreateLevel(level); 
+			}
+
+			if (moving[i].cType == '$') {
 				DeleteMoving(i);
 				i--;
 				continue;
 			}
-			CreateLevel(level);
-		} 
-	
+		}
+	}
 }
+
 
 bool IsPosInMap(int x, int y) {
 	return ( (x >= 0) && (x < mapWidth) && (y >= 0) && (y < mapHeight) );
@@ -177,10 +198,34 @@ TObject* GetNewMoving() {
 }
 
 void CreateLevel(int lvl) {
+	system("color 9F");
+	brickLength = 0;
+	movingLength = 0;
+	brick = static_cast<TObject*>(realloc(brick, 0));
+	moving = static_cast<TObject*>(realloc(moving, 0));
+
 	InitObject(&mario, 39, 10, 3, 3, '@');
 
 	if (lvl == 1) { 
-		brickLength = 0;
+		InitObject(GetNewBrick(), 20, 20, 40, 5, '#');
+			InitObject(GetNewBrick(), 30, 10, 5, 3, '?');
+			InitObject(GetNewBrick(), 50, 10, 5, 3, '?');
+		InitObject(GetNewBrick(), 60, 15, 10, 10, '#');
+			InitObject(GetNewBrick(), 60, 5, 10, 3, '-');
+			InitObject(GetNewBrick(), 70, 5, 5, 3, '?');
+			InitObject(GetNewBrick(), 75, 5, 5, 3, '-');
+			InitObject(GetNewBrick(), 80, 5, 5, 3, '?');
+			InitObject(GetNewBrick(), 85, 5, 10, 3, '-');
+		InitObject(GetNewBrick(), 100, 20, 40, 5, '#');
+		InitObject(GetNewBrick(), 120, 15, 10, 10, '#');
+		InitObject(GetNewBrick(), 150, 20, 40, 5, '#');
+		InitObject(GetNewBrick(), 210, 15, 10, 10, '+');	
+	
+		InitObject(GetNewMoving(), 25, 10, 3, 2, 'o');
+		InitObject(GetNewMoving(), 80, 10, 3, 2, 'o');
+	}
+
+	if (lvl == 2) { 
 		InitObject(GetNewBrick(), 20, 20, 40, 5, '#');
 		InitObject(GetNewBrick(), 60, 15, 10, 10, '#');
 		InitObject(GetNewBrick(), 80, 20, 40, 5, '#');
@@ -188,7 +233,6 @@ void CreateLevel(int lvl) {
 		InitObject(GetNewBrick(), 150, 20, 40, 5, '#');
 		InitObject(GetNewBrick(), 210, 15, 10, 10, '+');	
 		
-		movingLength = 0;
 		InitObject(GetNewMoving(), 25, 10, 3, 2, 'o');
 		InitObject(GetNewMoving(), 80, 10, 3, 2, 'o');
 		InitObject(GetNewMoving(), 65, 10, 3, 2, 'o');
@@ -197,14 +241,12 @@ void CreateLevel(int lvl) {
 		InitObject(GetNewMoving(), 175, 10, 3, 2, 'o');
 	}
 	
-	if (lvl == 2) {
-		brickLength = 0;
+	if (lvl == 3) {
 		InitObject(GetNewBrick(), 20, 20, 40, 5, '#');
 		InitObject(GetNewBrick(), 80, 20, 15, 5, '#');
 		InitObject(GetNewBrick(), 120, 15, 15, 10, '#');
 		InitObject(GetNewBrick(), 160, 10, 15, 15, '+');
 
-		movingLength = 0;
 		InitObject(GetNewMoving(), 25, 10, 3, 2, 'o');
 		InitObject(GetNewMoving(), 50, 10, 3, 2, 'o');
 		InitObject(GetNewMoving(), 80, 10, 3, 2, 'o');
@@ -216,7 +258,6 @@ void CreateLevel(int lvl) {
 
 int main() {
 	CreateLevel(level);
-	system("color 9F");
 
 	do {
 		ClearMap();
