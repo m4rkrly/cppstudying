@@ -27,9 +27,5 @@ namespace tkr {
 	
 		private:
 			void checkCapacity();
-			void copy(const T* oldArr, T* newArr, const std::size_t oldSize);
-			void connect(const std::size_t gapIndex);
-			void spread(const std::size_t gapIndex);
-			bool equal(const Vector& v2) const noexcept;
 	};
 }

@@ -14,44 +14,9 @@ Vector<T>::Vector() {
 template<typename T>
 Vector<T>::~Vector() {
 	delete[] arr;
-	arr = nullptr;
-}
-
-// Сравнение с другим вектором (равно/не равно)
-template<typename T>
-bool Vector<T>::equal(const Vector& v2) const noexcept {
-	if (this->size != v2.size) 
-		return false;
-	
-	for (int i = 0; i < this->size; i++) {
-		if (this->arr[i] != v2.arr[i])
-			return false;
-	}
-	return true;
-} 
-
-// Копирование старого массива в новый
-template<typename T>
-void Vector<T>::copy(const T* oldArr, T* newArr, const std::size_t oldSize) {
-	for(int i = 0; i < oldSize; i++) {
-		newArr[i] = oldArr[i];
-	}
-}
-
-// Проверка свободного места
-template<typename T>
-void Vector<T>::checkCapacity() {
-	if (capacity - size == 0) {
-		this->capacity = 2 * capacity;
-	} else if (capacity / 2 == size && capacity > 1) {
-		this->capacity = capacity / 2;
-	} else {
-		return;
-	}
-		T* newArr = new T[capacity];
-		copy(this->arr, newArr, this->size);
-		delete[] arr;
-		this->arr = newArr;	
+	this->arr = nullptr;
+	this->capacity = 1;
+	this->size = 0;
 }
 
 // Получение количества элементов
@@ -70,51 +35,23 @@ bool Vector<T>::has_item(const T& value) const noexcept {
 	return false;
 }
 
-// Добавить элемент в конец (справа)
-template<typename T>
-void Vector<T>::push_back(const T& value) {
-	checkCapacity();
-	this->arr[size] = value;
-	this->size++;
-}
-
-// Закрыть разрыв в массиве
-template<typename T>
-void Vector<T>::connect(const std::size_t gapIndex) {
-	for (int i = gapIndex; i < size - 1; i++) {
-		arr[i] = arr[i + 1];
-	}
-	this->size--;
-	checkCapacity();
-}
-
-// Удалить первое включение элемента
-template<typename T>
-bool Vector<T>::remove_first(const T& value) {
-	for (int i = 0; i < size; i++) {
-		if (this->arr[i] == value) {
-			connect(i);	
-			return true;
-		}
-	}
-	return false;
-}
-
-// Создать одну свободную ячейку по индексу
-template<typename T>
-void Vector<T>::spread(const std::size_t gapIndex) {
-	checkCapacity();
-	for (int i = size; i != gapIndex; i--) {
-		arr[i] = arr[i - 1];
-	}
-	this->size++;
-}
-
 // Вставить элемент по индексу
 template<typename T>
 bool Vector<T>::insert(const std::size_t position, const T& value) {
-	if (position >= 0 && position < size) {
-		spread(position);
+	if (position < size) {
+		T* tempArr = arr;
+		if (capacity - size == 0) {
+			tempArr = new T[2 * capacity];
+		} else if (capacity / 4 >= size) {
+			tempArr = new T[(size + size/2 >= 1) ? size + size/2 : 1];
+		}
+
+		for (int i = size; i != position; i--) {
+			tempArr[i] = arr[i - 1];
+		}
+		arr = tempArr;
+		this->size++;
+		
 		arr[position] = value;
 		return true;
 	} else {
@@ -134,3 +71,50 @@ void Vector<T>::print() const noexcept {
 	std::cout << "Capacity: " << this->capacity << std::endl;
 }
 
+// Добавить элемент в конец (справа)
+template<typename T>
+void Vector<T>::push_back(const T& value) {
+	checkCapacity();
+	this->arr[size] = value;
+	this->size++;
+}
+
+// Удалить первое включение элемента
+template<typename T>
+bool Vector<T>::remove_first(const T& value) {
+	for (int i = 0; i < size; i++) {
+		if (this->arr[i] == value) {
+			for (int j = i; j < size - 1; j++) {
+				arr[j] = arr[j + 1];
+			}
+			this->size--;
+			checkCapacity();	
+			return true;
+		}
+	}
+	return false;
+}
+
+
+// +---------------------------------------------------------------------------+
+// | PRIVATE                                                                   |
+// +---------------------------------------------------------------------------+
+
+//Проверка свободного места
+template<typename T>
+void Vector<T>::checkCapacity() {
+	if (capacity - size == 0) {
+		capacity = 2 * capacity;
+	} else if (capacity / 4 >= size) {
+		capacity = (size + size/2 >= 1) ? size + size/2 : 1;
+	} else {
+		return;
+	}
+		T* newArr = new T[capacity];
+		for(int i = 0; i < size; i++) {
+			newArr[i] = arr[i];
+		}
+		delete[] arr;
+		arr = newArr;	
+		newArr = nullptr;	
+}
