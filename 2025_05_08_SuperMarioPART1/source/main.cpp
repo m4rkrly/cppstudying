@@ -13,12 +13,18 @@ typedef struct SObject {
 	float vertSpeed;
 	bool IsFly;
 	char cType;
+	float horizSpeed;
 } TObject;
 
 char map[mapHeight][mapWidth+1];
 TObject mario;
+
 TObject* brick = nullptr;
 int brickLength;
+
+TObject *moving = nullptr;
+int movingLength;
+
 int level = 1;
 
 void ClearMap() {
@@ -46,6 +52,7 @@ void InitObject(TObject *obj, float xPos, float yPos, float oWidth, float oHeigh
 	(*obj).height = oHeight;
 	(*obj).vertSpeed = 0;
 	(*obj).cType = inType;
+	(*obj).horizSpeed = 0.2; 
 }
 
 bool IsCollision(TObject o1, TObject o2);
@@ -69,6 +76,47 @@ void VertMoveObject(TObject *obj) {
 			break;
 		}
 	}
+}
+
+void HorizonMoveObject(TObject *obj) {
+	// Поменял obj[0] на (*obj) сразу, а то забуду
+	(*obj).x += (*obj).horizSpeed;
+
+	for (int i = 0; i < brickLength; i++) 
+		if (IsCollision(obj[0], brick[i])) {
+			(*obj).x -= (*obj).horizSpeed;
+			(*obj).horizSpeed = -(*obj).horizSpeed;
+			return;
+		}
+
+	TObject temp = *obj;
+	VertMoveObject(&temp);
+	if (temp.IsFly == TRUE) {
+		(*obj).x -= (*obj).horizSpeed;
+		(*obj).horizSpeed = -(*obj).horizSpeed;
+	}
+}
+
+void DeleteMoving(int i) {
+	movingLength -= 1;
+	moving[i] = moving[movingLength];
+	moving = static_cast<TObject*>(realloc( moving, sizeof(*moving) * movingLength));
+}
+
+void MarioCollision() {
+	for (int i = 0; i < movingLength; i++) 
+		if (IsCollision(mario, moving[i])) {
+			if ( (mario.IsFly == true) 
+				&& (mario.vertSpeed > 0)
+				&& (mario.y + mario.height < moving[i].y + moving[i].height * 0.5)
+			) {
+				DeleteMoving(i);
+				i--;
+				continue;
+			}
+			CreateLevel(level);
+		} 
+	
 }
 
 bool IsPosInMap(int x, int y) {
@@ -106,6 +154,8 @@ void HorizontalMoveMap(float dx) {
 
 	for (int i = 0; i < brickLength; i++)
 		brick[i].x += dx;
+	for (int i = 0; i < movingLength; i++)
+		moving[i].x += dx;
 }
 
 bool IsCollision(TObject o1, TObject o2) {
@@ -126,6 +176,10 @@ void CreateLevel(int lvl) {
 		InitObject(brick+3, 120, 15, 10, 10, '#');
 		InitObject(brick+4, 150, 20, 40, 5, '#');
 		InitObject(brick+5, 210, 15, 10, 10, '+');	
+		
+		movingLength = 1;
+		moving = static_cast<TObject*>(realloc(moving, sizeof(*moving) * movingLength));
+		InitObject(moving+0, 25, 10, 3, 2, 'o');
 	}
 	
 	if (lvl == 2) {
@@ -140,7 +194,7 @@ void CreateLevel(int lvl) {
 
 int main() {
 	CreateLevel(level);
-	system("color 9F")
+	system("color 9F");
 
 	do {
 		ClearMap();
@@ -152,8 +206,20 @@ int main() {
 		if (mario.y > mapHeight) CreateLevel(level); 
 
 		VertMoveObject(&mario);
+		MarioCollision();
+
 		for (int i = 0; i < brickLength; i++) 
 			PutObjectOnMap(brick[i]);
+		for (int i = 0; i < movingLength; i++) {
+			VertMoveObject(moving + i);
+			HorizonMoveObject(moving + i);
+			if (moving[i].y > mapHeight) {
+				DeleteMoving(i);
+				i--;
+				continue;
+			}
+			PutObjectOnMap(moving[i]);
+		}
 		PutObjectOnMap(mario);
 		setCur(0, 0);
 		ShowMap(); 
