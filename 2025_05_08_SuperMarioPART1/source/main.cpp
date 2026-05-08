@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+
 #include <math.h>
+#include <windows.h>
 
 #define mapWidth 80
 #define mapHeight 25
@@ -8,10 +10,14 @@
 typedef struct SObject {
 	float x, y;
 	float width, height;
+	float vertSpeed;
+	bool IsFly;
 } TObject;
 
 char map[mapHeight][mapWidth+1];
 TObject mario;
+TObject* brick = nullptr;
+int brickLength;
 
 void ClearMap() {
 	for (int i = 0; i < mapWidth;  i++) 
@@ -36,6 +42,27 @@ void InitObject(TObject *obj, float xPos, float yPos, float oWidth, float oHeigh
 	SetObjectPos(obj, xPos, yPos);
 	(*obj).width = oWidth;
 	(*obj).height = oHeight;
+	(*obj).vertSpeed = 0;
+}
+
+bool IsCollision(TObject o1, TObject o2);
+
+void VertMoveObject(TObject *obj) {
+	(*obj).IsFly = true;
+	(*obj).vertSpeed += 0.05;
+	SetObjectPos(obj, (*obj).x, (*obj).y + (*obj).vertSpeed);
+	for (int i = 0; i < brickLength; i++) {	
+		if (IsCollision(*obj, brick[i])) {
+			(*obj).y -= (*obj).vertSpeed;
+			(*obj).vertSpeed = 0;
+			(*obj).IsFly = false;
+			break;
+		}
+	}
+}
+
+bool IsPosInMap(int x, int y) {
+	return ( (x >= 0) && (x < mapWidth) && (y >= 0) && (y < mapHeight) );
 }
 
 void PutObjectOnMap(TObject obj) {
@@ -46,14 +73,70 @@ void PutObjectOnMap(TObject obj) {
 
 	for (int i = ix; i < (ix + iWidth); i++)
 		for (int j = iy; j < (iy + iHeight); j++)
-			map[j][i] = '@';
+			if (IsPosInMap(i, j))
+				map[j][i] = '@';
+}
+
+void setCur(int x, int y) {
+	COORD coord;
+	coord.X = x;
+	coord.Y = y;
+	SetConsoleCursorPosition( GetStdHandle(STD_OUTPUT_HANDLE), coord );
+}
+
+void HorizontalMoveMap(float dx) {
+	mario.x -= dx;
+	for ( int i = 0; i < brickLength; i++) 
+		if (IsCollision(mario, brick[i]))
+		{
+			mario.x += dx;
+			return;
+		}
+	mario.x += dx;
+
+	for (int i = 0; i < brickLength; i++)
+		brick[i].x += dx;
+}
+
+bool IsCollision(TObject o1, TObject o2) {
+	return ((o1.x + o1.width > o2.x) && (o1.x < (o2.x + o2.width))) &&
+	((o1.y + o1.height) > o2.y) && (o1.y < (o2.y + o2.height)); 
+}
+
+void CreateLevel() {
+	InitObject(&mario, 39, 10, 3, 3);
+
+	brickLength = 5;
+	// Временное решение со static_cast. На рефакторинге будет исправлено
+	brick = static_cast<TObject*>(malloc( sizeof(*brick) * brickLength ));
+	InitObject(brick+0, 20, 20, 40, 5);
+	InitObject(brick+1, 60, 15, 10, 10);
+	InitObject(brick+2, 80, 20, 40, 5);
+	InitObject(brick+3, 120, 15, 10, 10);
+	InitObject(brick+4, 150, 20, 40, 5);
+	
 }
 
 int main() {
-	InitObject(&mario, 39, 10, 3, 3);
-	SetObjectPos(&mario, 20, 10);
-	ClearMap();
-	PutObjectOnMap(mario);
-	ShowMap(); 
+	CreateLevel();
+
+	do {
+		ClearMap();
+
+		if ((mario.IsFly == false) && (GetAsyncKeyState(VK_SPACE) < 0)) mario.vertSpeed = -1;
+		if (GetAsyncKeyState('A') < 0) HorizontalMoveMap(1);
+		if (GetAsyncKeyState('D') < 0) HorizontalMoveMap(-1);
+
+		VertMoveObject(&mario);
+		for (int i = 0; i < brickLength; i++) 
+			PutObjectOnMap(brick[i]);
+		PutObjectOnMap(mario);
+		setCur(0, 0);
+		ShowMap(); 
+
+		Sleep(10);
+	// Заменил GetKeyState на Async версию
+	} while (GetAsyncKeyState(VK_ESCAPE) >= 0);
+	
 	return 0;
 }
