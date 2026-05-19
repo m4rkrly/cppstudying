@@ -17,9 +17,7 @@ typedef struct SObject
 	float horizSpeed;
 } TObject;
 
-char map[mapHeight][mapWidth+1];
-
-void clearMap();
+void clearMap(char map[mapHeight][mapWidth+1]);
 void createLevel(TObject& mario, TObject*& brick, TObject*& moving, int& brickLength, int& movingLength, int lvl, int& maxLvl, int& score);
 void deleteMoving(int i, TObject*& moving, int& movingLength);
 TObject* getNewBrick(TObject*& brick, int& brickLength);
@@ -31,15 +29,17 @@ bool isCollision(TObject o1, TObject o2);
 bool isPosInMap(int x, int y);
 void marioCollision(TObject mario, TObject*& brick, TObject*& moving, int& brickLength, int& movingLength, int& score, int level, int maxLvl);
 void playerDead(TObject& mario, TObject*& brick, TObject*& moving, int& brickLength, int& movingLength, int level, int maxLvl, int& score);
-void putObjectOnMap(TObject obj);
-void putScoreOnMap(int& score);
+void putObjectOnMap(TObject obj, char map[mapHeight][mapWidth+1]);
+void putScoreOnMap(int& score, char map[mapHeight][mapWidth+1]);
 void setObjectPos(TObject* obj, float xPos, float yPos);
-void showMap();
+void showMap(char map[mapHeight][mapWidth+1]);
 void setCur(int x, int y);
 void vertMoveObject(TObject* obj, TObject& mario, TObject*& brick, TObject*& moving, int& brickLength, int& movingLength, int& score, int& level, int maxLvl);
 
 int main() 
 {
+	char map[mapHeight][mapWidth+1];
+
 	TObject mario;
 	TObject* brick = nullptr;
 	int brickLength;
@@ -54,7 +54,7 @@ int main()
 
 	do 
 	{
-		clearMap();
+		clearMap(map);
 
 		if ((mario.IsFly == false) && (GetAsyncKeyState(VK_SPACE) < 0))
 			mario.vertSpeed = -1;
@@ -70,7 +70,7 @@ int main()
 		marioCollision(mario, brick, moving, brickLength, movingLength, score, level, maxLvl);
 
 		for (int i = 0; i < brickLength; i++) 
-			putObjectOnMap(brick[i]);
+			putObjectOnMap(brick[i], map);
 		for (int i = 0; i < movingLength; i++) 
 		{
 			vertMoveObject(moving + i, mario, brick, moving, brickLength, movingLength, score, level, maxLvl);
@@ -81,12 +81,12 @@ int main()
 				i--;
 				continue;
 			}
-			putObjectOnMap(moving[i]);
+			putObjectOnMap(moving[i], map);
 		}
-		putObjectOnMap(mario);
-		putScoreOnMap(score);
+		putObjectOnMap(mario, map);
+		putScoreOnMap(score, map);
 		setCur(0, 0);
-		showMap(); 
+		showMap(map); 
 
 		Sleep(10);
 	} while (GetAsyncKeyState(VK_ESCAPE) >= 0);
@@ -95,7 +95,7 @@ int main()
 }
 
 
-void clearMap() 
+void clearMap(char map[mapHeight][mapWidth+1]) 
 {
 	for (int i = 0; i < mapWidth;  i++) 
 		map[0][i] = ' ';
@@ -302,7 +302,7 @@ void playerDead(TObject& mario, TObject*& brick, TObject*& moving, int& brickLen
 }
 
 
-void putObjectOnMap(TObject obj) 
+void putObjectOnMap(TObject obj, char map[mapHeight][mapWidth+1]) 
 {
 	int ix = (int)round(obj.x);
 	int iy = (int)round(obj.y);
@@ -316,7 +316,7 @@ void putObjectOnMap(TObject obj)
 }
 
 
-void putScoreOnMap(int& score) 
+void putScoreOnMap(int& score, char map[mapHeight][mapWidth+1]) 
 {
 	char c[30];
 	sprintf(c, "Score: %d", score);
@@ -333,7 +333,7 @@ void setObjectPos(TObject* obj, float xPos, float yPos)
 }
 
 
-void showMap() 
+void showMap(char map[mapHeight][mapWidth+1]) 
 {
 	map[mapHeight - 1][mapWidth - 1] = '\0';
 	for (int j = 0; j < mapHeight; j++)
