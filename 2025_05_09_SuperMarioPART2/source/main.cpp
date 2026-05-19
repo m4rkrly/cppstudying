@@ -5,44 +5,30 @@
 #include <windows.h>
 
 #include "config.hpp"
+#include "view.hpp"
+#include "structs.hpp"
 
-typedef struct SObject 
-{
-	float x, y;
-	float width, height;
-	float vertSpeed;
-	bool IsFly;
-	char cType;
-	float horizSpeed;
-} TObject;
-
-void clearMap(char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]);
-void createLevel(TObject& mario, TObject*& brick, TObject*& moving, int& brickLength, int& movingLength, int lvl, int& maxLvl, int& score);
-void deleteMoving(int i, TObject*& moving, int& movingLength);
-TObject* getNewBrick(TObject*& brick, int& brickLength);
-TObject* getNewMoving(TObject*& moving, int& movingLength);
-void horizonMoveMap(TObject& mario, TObject*& brick, TObject*& moving, int& brickLength, int& movingLength, float dx);
-void horizonMoveObject(TObject* obj, TObject& mario, TObject*& brick, TObject*& moving, int& brickLength, int& movingLength, int& score, int& level, int maxLvl);
-void initObject(TObject* obj, float xPos, float yPos, float oWidth, float oHeight, char inType);
-bool isCollision(TObject o1, TObject o2);
-bool isPosInMap(int x, int y);
-void marioCollision(TObject mario, TObject*& brick, TObject*& moving, int& brickLength, int& movingLength, int& score, int level, int maxLvl);
-void playerDead(TObject& mario, TObject*& brick, TObject*& moving, int& brickLength, int& movingLength, int level, int maxLvl, int& score);
-void putObjectOnMap(TObject obj, char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]);
-void putScoreOnMap(int& score, char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]);
-void setObjectPos(TObject* obj, float xPos, float yPos);
-void showMap(char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]);
-void setCur(int x, int y);
-void vertMoveObject(TObject* obj, TObject& mario, TObject*& brick, TObject*& moving, int& brickLength, int& movingLength, int& score, int& level, int maxLvl);
+void createLevel(m4rly::TObject& mario, m4rly::TObject*& brick, m4rly::TObject*& moving, int& brickLength, int& movingLength, int lvl, int& maxLvl, int& score);
+void deleteMoving(int i, m4rly::TObject*& moving, int& movingLength);
+m4rly::TObject* getNewBrick(m4rly::TObject*& brick, int& brickLength);
+m4rly::TObject* getNewMoving(m4rly::TObject*& moving, int& movingLength);
+void horizonMoveMap(m4rly::TObject& mario, m4rly::TObject*& brick, m4rly::TObject*& moving, int& brickLength, int& movingLength, float dx);
+void horizonMoveObject(m4rly::TObject* obj, m4rly::TObject& mario, m4rly::TObject*& brick, m4rly::TObject*& moving, int& brickLength, int& movingLength, int& score, int& level, int maxLvl);
+void initObject(m4rly::TObject* obj, float xPos, float yPos, float oWidth, float oHeight, char inType);
+bool isCollision(m4rly::TObject o1, m4rly::TObject o2);
+void marioCollision(m4rly::TObject mario, m4rly::TObject*& brick, m4rly::TObject*& moving, int& brickLength, int& movingLength, int& score, int level, int maxLvl);
+void playerDead(m4rly::TObject& mario, m4rly::TObject*& brick, m4rly::TObject*& moving, int& brickLength, int& movingLength, int level, int maxLvl, int& score);
+void setObjectPos(m4rly::TObject* obj, float xPos, float yPos);
+void vertMoveObject(m4rly::TObject* obj, m4rly::TObject& mario, m4rly::TObject*& brick, m4rly::TObject*& moving, int& brickLength, int& movingLength, int& score, int& level, int maxLvl);
 
 int main() 
 {
 	char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1];
 
-	TObject mario;
-	TObject* brick = nullptr;
+	m4rly::TObject mario;
+	m4rly::TObject* brick = nullptr;
 	int brickLength;
-	TObject* moving = nullptr;
+	m4rly::TObject* moving = nullptr;
 	int movingLength;
 
 	int level = 1;
@@ -53,7 +39,7 @@ int main()
 
 	do 
 	{
-		clearMap(map);
+		m4rly::view::clearMap(map);
 
 		if ((mario.IsFly == false) && (GetAsyncKeyState(VK_SPACE) < 0))
 			mario.vertSpeed = -1;
@@ -69,7 +55,7 @@ int main()
 		marioCollision(mario, brick, moving, brickLength, movingLength, score, level, maxLvl);
 
 		for (int i = 0; i < brickLength; i++) 
-			putObjectOnMap(brick[i], map);
+			m4rly::view::putObjectOnMap(brick[i], map);
 		for (int i = 0; i < movingLength; i++) 
 		{
 			vertMoveObject(moving + i, mario, brick, moving, brickLength, movingLength, score, level, maxLvl);
@@ -80,12 +66,12 @@ int main()
 				i--;
 				continue;
 			}
-			putObjectOnMap(moving[i], map);
+			m4rly::view::putObjectOnMap(moving[i], map);
 		}
-		putObjectOnMap(mario, map);
-		putScoreOnMap(score, map);
-		setCur(0, 0);
-		showMap(map); 
+		m4rly::view::putObjectOnMap(mario, map);
+		m4rly::view::putScoreOnMap(score, map);
+		m4rly::view::setCur(0, 0);
+		m4rly::view::showMap(map); 
 
 		Sleep(10);
 	} while (GetAsyncKeyState(VK_ESCAPE) >= 0);
@@ -93,24 +79,13 @@ int main()
 	return 0;
 }
 
-
-void clearMap(char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]) 
-{
-	for (int i = 0; i < m4rly::cfg::mapWidth;  i++) 
-		map[0][i] = ' ';
-	map[0][m4rly::cfg::mapWidth] = '\0';
-	for (int j = 1; j < m4rly::cfg::mapHeight; j++)
-		sprintf(map[j], map[0]);
-}
-
-
-void createLevel(TObject& mario, TObject*& brick, TObject*& moving, int& brickLength, int& movingLength, int lvl, int& maxLvl, int& score) 
+void createLevel(m4rly::TObject& mario, m4rly::TObject*& brick, m4rly::TObject*& moving, int& brickLength, int& movingLength, int lvl, int& maxLvl, int& score) 
 {
 	system("color 9F");
 	brickLength = 0;
 	movingLength = 0;
-	brick = static_cast<TObject*>(realloc(brick, 0));
-	moving = static_cast<TObject*>(realloc(moving, 0));
+	brick = static_cast<m4rly::TObject*>(realloc(brick, 0));
+	moving = static_cast<m4rly::TObject*>(realloc(moving, 0));
 
 	initObject(&mario, 39, 10, 3, 3, '@');
 	score = 0;
@@ -170,31 +145,31 @@ void createLevel(TObject& mario, TObject*& brick, TObject*& moving, int& brickLe
 }
 
 
-void deleteMoving(int i, TObject*& moving, int& movingLength) 
+void deleteMoving(int i, m4rly::TObject*& moving, int& movingLength) 
 {
 	movingLength -= 1;
 	moving[i] = moving[movingLength];
-	moving = static_cast<TObject*>(realloc( moving, sizeof(*moving) * movingLength));
+	moving = static_cast<m4rly::TObject*>(realloc( moving, sizeof(*moving) * movingLength));
 }
 
 
-TObject* getNewBrick(TObject*& brick, int& brickLength) 
+m4rly::TObject* getNewBrick(m4rly::TObject*& brick, int& brickLength) 
 {
 	brickLength++;
-	brick = static_cast<TObject*>(realloc(brick, sizeof(*brick) * brickLength));
+	brick = static_cast<m4rly::TObject*>(realloc(brick, sizeof(*brick) * brickLength));
 	return brick + brickLength - 1;
 }
 
 
-TObject* getNewMoving(TObject*& moving, int& movingLength) 
+m4rly::TObject* getNewMoving(m4rly::TObject*& moving, int& movingLength) 
 {
 	movingLength++;
-	moving = static_cast<TObject*>(realloc(moving, sizeof(*moving) * movingLength));
+	moving = static_cast<m4rly::TObject*>(realloc(moving, sizeof(*moving) * movingLength));
 	return moving + movingLength - 1;
 }
 
 
-void horizonMoveMap(TObject& mario, TObject*& brick, TObject*& moving, int& brickLength, int& movingLength, float dx) 
+void horizonMoveMap(m4rly::TObject& mario, m4rly::TObject*& brick, m4rly::TObject*& moving, int& brickLength, int& movingLength, float dx) 
 {
 	mario.x -= dx;
 	for (int i = 0; i < brickLength; i++) 
@@ -212,7 +187,7 @@ void horizonMoveMap(TObject& mario, TObject*& brick, TObject*& moving, int& bric
 }
 
 
-void horizonMoveObject(TObject* obj, TObject& mario, TObject*& brick, TObject*& moving, int& brickLength, int& movingLength, int& score, int& level, int maxLvl) 
+void horizonMoveObject(m4rly::TObject* obj, m4rly::TObject& mario, m4rly::TObject*& brick, m4rly::TObject*& moving, int& brickLength, int& movingLength, int& score, int& level, int maxLvl) 
 {
 	(*obj).x += (*obj).horizSpeed;
 
@@ -226,7 +201,7 @@ void horizonMoveObject(TObject* obj, TObject& mario, TObject*& brick, TObject*& 
 
 	if ((*obj).cType == 'o') 
 	{
-		TObject temp = *obj;
+		m4rly::TObject temp = *obj;
 		vertMoveObject(&temp, mario, brick, moving, brickLength, movingLength, score, level, maxLvl);
 		if (temp.IsFly == true) 
 		{
@@ -237,7 +212,7 @@ void horizonMoveObject(TObject* obj, TObject& mario, TObject*& brick, TObject*& 
 }
 
 
-void initObject(TObject* obj, float xPos, float yPos, float oWidth, float oHeight, char inType) 
+void initObject(m4rly::TObject* obj, float xPos, float yPos, float oWidth, float oHeight, char inType) 
 {
 	setObjectPos(obj, xPos, yPos);
 	(*obj).width = oWidth;
@@ -248,20 +223,14 @@ void initObject(TObject* obj, float xPos, float yPos, float oWidth, float oHeigh
 }
 
 
-bool isCollision(TObject o1, TObject o2) 
+bool isCollision(m4rly::TObject o1, m4rly::TObject o2) 
 {
 	return ((o1.x + o1.width > o2.x) && (o1.x < (o2.x + o2.width))) &&
 	((o1.y + o1.height) > o2.y) && (o1.y < (o2.y + o2.height)); 
 }
 
 
-bool isPosInMap(int x, int y) 
-{
-	return ((x >= 0) && (x < m4rly::cfg::mapWidth) && (y >= 0) && (y < m4rly::cfg::mapHeight));
-}
-
-
-void marioCollision(TObject mario, TObject*& brick, TObject*& moving, int& brickLength, int& movingLength, int& score, int level, int maxLvl) {
+void marioCollision(m4rly::TObject mario, m4rly::TObject*& brick, m4rly::TObject*& moving, int& brickLength, int& movingLength, int& score, int level, int maxLvl) {
 	for (int i = 0; i < movingLength; i++) 
 	{ 
 		if (isCollision(mario, moving[i])) 
@@ -293,7 +262,7 @@ void marioCollision(TObject mario, TObject*& brick, TObject*& moving, int& brick
 }
 
 
-void playerDead(TObject& mario, TObject*& brick, TObject*& moving, int& brickLength, int& movingLength, int level, int maxLvl, int& score) 
+void playerDead(m4rly::TObject& mario, m4rly::TObject*& brick, m4rly::TObject*& moving, int& brickLength, int& movingLength, int level, int maxLvl, int& score) 
 {
 	system("color 4F");
 	Sleep(500);
@@ -301,55 +270,14 @@ void playerDead(TObject& mario, TObject*& brick, TObject*& moving, int& brickLen
 }
 
 
-void putObjectOnMap(TObject obj, char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]) 
-{
-	int ix = (int)round(obj.x);
-	int iy = (int)round(obj.y);
-	int iWidth = (int)round(obj.width);
-	int iHeight = (int)round(obj.height);
-
-	for (int i = ix; i < (ix + iWidth); i++)
-		for (int j = iy; j < (iy + iHeight); j++)
-			if (isPosInMap(i, j))
-				map[j][i] = obj.cType;
-}
-
-
-void putScoreOnMap(int& score, char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]) 
-{
-	char c[30];
-	sprintf(c, "Score: %d", score);
-	int len = strlen(c);
-	for (int i = 0; i < len; i++) {
-		map[1][i+5] = c[i];
-	}
-}
-
-void setObjectPos(TObject* obj, float xPos, float yPos) 
+void setObjectPos(m4rly::TObject* obj, float xPos, float yPos) 
 {
 	(*obj).x = xPos;
 	(*obj).y = yPos;
 }
 
 
-void showMap(char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]) 
-{
-	map[m4rly::cfg::mapHeight - 1][m4rly::cfg::mapWidth - 1] = '\0';
-	for (int j = 0; j < m4rly::cfg::mapHeight; j++)
-		printf("%s", map[j]);
-}
-
-
-void setCur(int x, int y) 
-{
-	COORD coord;
-	coord.X = x;
-	coord.Y = y;
-	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
-}
-
-
-void vertMoveObject(TObject* obj, TObject& mario, TObject*& brick, TObject*& moving, int& brickLength, int& movingLength, int& score, int& level, int maxLvl) 
+void vertMoveObject(m4rly::TObject* obj, m4rly::TObject& mario, m4rly::TObject*& brick, m4rly::TObject*& moving, int& brickLength, int& movingLength, int& score, int& level, int maxLvl) 
 {
 	(*obj).IsFly = true;
 	(*obj).vertSpeed += 0.05;
