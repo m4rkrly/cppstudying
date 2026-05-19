@@ -4,8 +4,7 @@
 #include <math.h>
 #include <windows.h>
 
-#define mapWidth 80
-#define mapHeight 25
+#include "config.hpp"
 
 typedef struct SObject 
 {
@@ -17,7 +16,7 @@ typedef struct SObject
 	float horizSpeed;
 } TObject;
 
-void clearMap(char map[mapHeight][mapWidth+1]);
+void clearMap(char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]);
 void createLevel(TObject& mario, TObject*& brick, TObject*& moving, int& brickLength, int& movingLength, int lvl, int& maxLvl, int& score);
 void deleteMoving(int i, TObject*& moving, int& movingLength);
 TObject* getNewBrick(TObject*& brick, int& brickLength);
@@ -29,16 +28,16 @@ bool isCollision(TObject o1, TObject o2);
 bool isPosInMap(int x, int y);
 void marioCollision(TObject mario, TObject*& brick, TObject*& moving, int& brickLength, int& movingLength, int& score, int level, int maxLvl);
 void playerDead(TObject& mario, TObject*& brick, TObject*& moving, int& brickLength, int& movingLength, int level, int maxLvl, int& score);
-void putObjectOnMap(TObject obj, char map[mapHeight][mapWidth+1]);
-void putScoreOnMap(int& score, char map[mapHeight][mapWidth+1]);
+void putObjectOnMap(TObject obj, char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]);
+void putScoreOnMap(int& score, char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]);
 void setObjectPos(TObject* obj, float xPos, float yPos);
-void showMap(char map[mapHeight][mapWidth+1]);
+void showMap(char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]);
 void setCur(int x, int y);
 void vertMoveObject(TObject* obj, TObject& mario, TObject*& brick, TObject*& moving, int& brickLength, int& movingLength, int& score, int& level, int maxLvl);
 
 int main() 
 {
-	char map[mapHeight][mapWidth+1];
+	char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1];
 
 	TObject mario;
 	TObject* brick = nullptr;
@@ -63,7 +62,7 @@ int main()
 		if (GetAsyncKeyState('D') < 0) 
 			horizonMoveMap(mario, brick, moving, brickLength, movingLength, -1);
 
-		if (mario.y > mapHeight)
+		if (mario.y > m4rly::cfg::mapHeight)
 		 	playerDead(mario, brick, moving, brickLength, movingLength, level, maxLvl, score); 
 
 		vertMoveObject(&mario, mario, brick, moving, brickLength, movingLength, score, level, maxLvl);
@@ -75,7 +74,7 @@ int main()
 		{
 			vertMoveObject(moving + i, mario, brick, moving, brickLength, movingLength, score, level, maxLvl);
 			horizonMoveObject(moving + i, mario, brick, moving, brickLength, movingLength, score, level, maxLvl);
-			if (moving[i].y > mapHeight) 
+			if (moving[i].y > m4rly::cfg::mapHeight) 
 			{
 				deleteMoving(i, moving, movingLength);
 				i--;
@@ -95,12 +94,12 @@ int main()
 }
 
 
-void clearMap(char map[mapHeight][mapWidth+1]) 
+void clearMap(char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]) 
 {
-	for (int i = 0; i < mapWidth;  i++) 
+	for (int i = 0; i < m4rly::cfg::mapWidth;  i++) 
 		map[0][i] = ' ';
-	map[0][mapWidth] = '\0';
-	for (int j = 1; j < mapHeight; j++)
+	map[0][m4rly::cfg::mapWidth] = '\0';
+	for (int j = 1; j < m4rly::cfg::mapHeight; j++)
 		sprintf(map[j], map[0]);
 }
 
@@ -258,7 +257,7 @@ bool isCollision(TObject o1, TObject o2)
 
 bool isPosInMap(int x, int y) 
 {
-	return ((x >= 0) && (x < mapWidth) && (y >= 0) && (y < mapHeight));
+	return ((x >= 0) && (x < m4rly::cfg::mapWidth) && (y >= 0) && (y < m4rly::cfg::mapHeight));
 }
 
 
@@ -302,7 +301,7 @@ void playerDead(TObject& mario, TObject*& brick, TObject*& moving, int& brickLen
 }
 
 
-void putObjectOnMap(TObject obj, char map[mapHeight][mapWidth+1]) 
+void putObjectOnMap(TObject obj, char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]) 
 {
 	int ix = (int)round(obj.x);
 	int iy = (int)round(obj.y);
@@ -316,7 +315,7 @@ void putObjectOnMap(TObject obj, char map[mapHeight][mapWidth+1])
 }
 
 
-void putScoreOnMap(int& score, char map[mapHeight][mapWidth+1]) 
+void putScoreOnMap(int& score, char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]) 
 {
 	char c[30];
 	sprintf(c, "Score: %d", score);
@@ -333,10 +332,10 @@ void setObjectPos(TObject* obj, float xPos, float yPos)
 }
 
 
-void showMap(char map[mapHeight][mapWidth+1]) 
+void showMap(char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]) 
 {
-	map[mapHeight - 1][mapWidth - 1] = '\0';
-	for (int j = 0; j < mapHeight; j++)
+	map[m4rly::cfg::mapHeight - 1][m4rly::cfg::mapWidth - 1] = '\0';
+	for (int j = 0; j < m4rly::cfg::mapHeight; j++)
 		printf("%s", map[j]);
 }
 
