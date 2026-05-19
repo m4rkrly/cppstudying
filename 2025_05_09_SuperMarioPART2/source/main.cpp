@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
+#include <iostream>
 #include <math.h>
 #include <windows.h>
 
@@ -105,12 +105,7 @@ void clearMap()
 }
 
 
-void createLevel(
-	TObject& mario, 
-	TObject*& brick, TObject*& moving, 
-	int& brickLength, int& movingLength, 
-	int lvl, int& maxLvl, int& score
-) 
+void createLevel(TObject& mario, TObject*& brick, TObject*& moving, int& brickLength, int& movingLength, int lvl, int& maxLvl, int& score) 
 {
 	system("color 9F");
 	brickLength = 0;
@@ -233,7 +228,7 @@ void horizonMoveObject(TObject* obj, TObject& mario, TObject*& brick, TObject*& 
 	if ((*obj).cType == 'o') 
 	{
 		TObject temp = *obj;
-		vertMoveObject(&temp, mario, brick, moving, movingLength, brickLength, score, level, maxLvl);
+		vertMoveObject(&temp, mario, brick, moving, brickLength, movingLength, score, level, maxLvl);
 		if (temp.IsFly == true) 
 		{
 			(*obj).x -= (*obj).horizSpeed;
