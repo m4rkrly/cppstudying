@@ -7,9 +7,6 @@
 #include "view.hpp"
 #include "structs.hpp"
 
-bool isPosInMap(int x, int y);
-void putObjectOnMap(m4rly::TObject obj, char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]);
-void putScoreOnMap(int& score, char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]);
 void showMap(char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]);
 void setCur(int x, int y);
 void createLevel(m4rly::TObject& mario, m4rly::TObject*& brick, m4rly::TObject*& moving, int& brickLength, int& movingLength, int lvl, int& maxLvl, int& score);
@@ -59,7 +56,7 @@ int main()
 		marioCollision(mario, brick, moving, brickLength, movingLength, score, level, maxLvl);
 
 		for (int i = 0; i < brickLength; i++) 
-			putObjectOnMap(brick[i], map);
+			m4rly::view::putObjectOnMap(brick[i], map);
 		for (int i = 0; i < movingLength; i++) 
 		{
 			vertMoveObject(moving + i, mario, brick, moving, brickLength, movingLength, score, level, maxLvl);
@@ -70,10 +67,10 @@ int main()
 				i--;
 				continue;
 			}
-			putObjectOnMap(moving[i], map);
+			m4rly::view::putObjectOnMap(moving[i], map);
 		}
-		putObjectOnMap(mario, map);
-		putScoreOnMap(score, map);
+		m4rly::view::putObjectOnMap(mario, map);
+		m4rly::view::putScoreOnMap(score, map);
 		setCur(0, 0);
 		showMap(map); 
 
@@ -235,12 +232,6 @@ bool isCollision(m4rly::TObject o1, m4rly::TObject o2)
 }
 
 
-bool isPosInMap(int x, int y) 
-{
-	return ((x >= 0) && (x < m4rly::cfg::mapWidth) && (y >= 0) && (y < m4rly::cfg::mapHeight));
-}
-
-
 void marioCollision(m4rly::TObject mario, m4rly::TObject*& brick, m4rly::TObject*& moving, int& brickLength, int& movingLength, int& score, int level, int maxLvl) {
 	for (int i = 0; i < movingLength; i++) 
 	{ 
@@ -280,30 +271,6 @@ void playerDead(m4rly::TObject& mario, m4rly::TObject*& brick, m4rly::TObject*& 
 	createLevel(mario, brick, moving, brickLength, movingLength, level, maxLvl, score);
 }
 
-
-void putObjectOnMap(m4rly::TObject obj, char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]) 
-{
-	int ix = (int)round(obj.x);
-	int iy = (int)round(obj.y);
-	int iWidth = (int)round(obj.width);
-	int iHeight = (int)round(obj.height);
-
-	for (int i = ix; i < (ix + iWidth); i++)
-		for (int j = iy; j < (iy + iHeight); j++)
-			if (isPosInMap(i, j))
-				map[j][i] = obj.cType;
-}
-
-
-void putScoreOnMap(int& score, char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]) 
-{
-	char c[30];
-	sprintf(c, "Score: %d", score);
-	int len = strlen(c);
-	for (int i = 0; i < len; i++) {
-		map[1][i+5] = c[i];
-	}
-}
 
 void setObjectPos(m4rly::TObject* obj, float xPos, float yPos) 
 {
