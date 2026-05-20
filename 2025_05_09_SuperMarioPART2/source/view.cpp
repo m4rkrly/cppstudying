@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
+#include <iostream>
 
 #include "view.hpp"
 #include "config.hpp"
@@ -54,3 +55,9 @@ void m4rly::view::setCur(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
+void m4rly::view::showMap(char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]) 
+{
+	map[m4rly::cfg::mapHeight - 1][m4rly::cfg::mapWidth - 1] = '\0';
+	for (int j = 0; j < m4rly::cfg::mapHeight; j++)
+		std::cout << map[j] << '\0';
+}

@@ -8,8 +8,6 @@
 #include "view.hpp"
 #include "structs.hpp"
 
-void showMap(char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]);
-
 int main() 
 {
 	char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1];
@@ -60,17 +58,10 @@ int main()
 		m4rly::view::putObjectOnMap(mario, map);
 		m4rly::view::putScoreOnMap(score, map);
 		m4rly::view::setCur(0, 0);
-		showMap(map); 
+		m4rly::view::showMap(map); 
 
 		Sleep(10);
 	} while (GetAsyncKeyState(VK_ESCAPE) >= 0);
 	
 	return 0;
-}
-
-void showMap(char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]) 
-{
-	map[m4rly::cfg::mapHeight - 1][m4rly::cfg::mapWidth - 1] = '\0';
-	for (int j = 0; j < m4rly::cfg::mapHeight; j++)
-		printf("%s", map[j]);
 }
