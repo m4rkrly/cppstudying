@@ -8,7 +8,7 @@
 #include "structs.hpp"
 
 void showMap(char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]);
-void setCur(int x, int y);
+
 void createLevel(m4rly::TObject& mario, m4rly::TObject*& brick, m4rly::TObject*& moving, int& brickLength, int& movingLength, int lvl, int& maxLvl, int& score);
 void deleteMoving(int i, m4rly::TObject*& moving, int& movingLength);
 m4rly::TObject* getNewBrick(m4rly::TObject*& brick, int& brickLength);
@@ -71,7 +71,7 @@ int main()
 		}
 		m4rly::view::putObjectOnMap(mario, map);
 		m4rly::view::putScoreOnMap(score, map);
-		setCur(0, 0);
+		m4rly::view::setCur(0, 0);
 		showMap(map); 
 
 		Sleep(10);
@@ -284,15 +284,6 @@ void showMap(char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1])
 	map[m4rly::cfg::mapHeight - 1][m4rly::cfg::mapWidth - 1] = '\0';
 	for (int j = 0; j < m4rly::cfg::mapHeight; j++)
 		printf("%s", map[j]);
-}
-
-
-void setCur(int x, int y) 
-{
-	COORD coord;
-	coord.X = x;
-	coord.Y = y;
-	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
 

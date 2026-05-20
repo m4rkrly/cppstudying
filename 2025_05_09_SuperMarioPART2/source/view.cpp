@@ -46,3 +46,11 @@ void m4rly::view::putScoreOnMap(int& score, char map[m4rly::cfg::mapHeight][m4rl
 	}
 }
 
+void m4rly::view::setCur(int x, int y) 
+{
+	COORD coord;
+	coord.X = x;
+	coord.Y = y;
+	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
+}
+
