@@ -3,7 +3,12 @@
 
 #include "model.hpp"
 
-void m4rly::model::createLevel(m4rly::TObject& mario, m4rly::TObject*& brick, m4rly::TObject*& moving, int& brickLength, int& movingLength, int lvl, int& maxLvl, int& score) 
+void m4rly::model::createLevel(
+	m4rly::TObject& mario, 
+	m4rly::TObject*& brick, m4rly::TObject*& moving, 
+	int& brickLength, int& movingLength, 
+	int lvl, int& maxLvl, int& score
+) 
 {
 	system("color 9F");
 	brickLength = 0;
@@ -69,7 +74,9 @@ void m4rly::model::createLevel(m4rly::TObject& mario, m4rly::TObject*& brick, m4
 }
 
 
-void m4rly::model::deleteMoving(int i, m4rly::TObject*& moving, int& movingLength) 
+void m4rly::model::deleteMoving(
+	int i, m4rly::TObject*& moving, int& movingLength
+) 
 {
 	movingLength -= 1;
 	moving[i] = moving[movingLength];
@@ -77,7 +84,10 @@ void m4rly::model::deleteMoving(int i, m4rly::TObject*& moving, int& movingLengt
 }
 
 
-m4rly::TObject* m4rly::model::getNewBrick(m4rly::TObject*& brick, int& brickLength) 
+m4rly::TObject* m4rly::model::getNewBrick(
+	m4rly::TObject*& brick, 
+	int& brickLength
+) 
 {
 	brickLength++;
 	brick = static_cast<m4rly::TObject*>(realloc(brick, sizeof(*brick) * brickLength));
@@ -85,7 +95,10 @@ m4rly::TObject* m4rly::model::getNewBrick(m4rly::TObject*& brick, int& brickLeng
 }
 
  
-m4rly::TObject* m4rly::model::getNewMoving(m4rly::TObject*& moving, int& movingLength) 
+m4rly::TObject* m4rly::model::getNewMoving(
+	m4rly::TObject*& moving, 
+	int& movingLength
+) 
 {
 	movingLength++;
 	moving = static_cast<m4rly::TObject*>(realloc(moving, sizeof(*moving) * movingLength));
@@ -93,7 +106,12 @@ m4rly::TObject* m4rly::model::getNewMoving(m4rly::TObject*& moving, int& movingL
 }
 
 
-void m4rly::model::horizonMoveMap(m4rly::TObject& mario, m4rly::TObject*& brick, m4rly::TObject*& moving, int& brickLength, int& movingLength, float dx) 
+void m4rly::model::horizonMoveMap(
+	m4rly::TObject& mario, 
+	m4rly::TObject*& brick, m4rly::TObject*& moving, 
+	int& brickLength, int& movingLength, 
+	float dx
+) 
 {
 	mario.x -= dx;
 	for (int i = 0; i < brickLength; i++) 
@@ -111,7 +129,12 @@ void m4rly::model::horizonMoveMap(m4rly::TObject& mario, m4rly::TObject*& brick,
 }
 
 
-void m4rly::model::horizonMoveObject(m4rly::TObject* obj, m4rly::TObject& mario, m4rly::TObject*& brick, m4rly::TObject*& moving, int& brickLength, int& movingLength, int& score, int& level, int maxLvl) 
+void m4rly::model::horizonMoveObject(
+	m4rly::TObject* obj, m4rly::TObject& mario, 
+	m4rly::TObject*& brick, m4rly::TObject*& moving, 
+	int& brickLength, int& movingLength, int& score, 
+	int& level, int maxLvl
+) 
 {
 	(*obj).x += (*obj).horizSpeed;
 
@@ -143,7 +166,10 @@ bool m4rly::model::isCollision(m4rly::TObject o1, m4rly::TObject o2)
 }
 
 
-void m4rly::model::initObject(m4rly::TObject* obj, float xPos, float yPos, float oWidth, float oHeight, char inType) 
+void m4rly::model::initObject(
+	m4rly::TObject* obj, float xPos, float yPos, 
+	float oWidth, float oHeight, char inType
+) 
 {
 	m4rly::model::setObjectPos(obj, xPos, yPos);
 	(*obj).width = oWidth;
@@ -154,7 +180,13 @@ void m4rly::model::initObject(m4rly::TObject* obj, float xPos, float yPos, float
 }
 
 
-void m4rly::model::marioCollision(m4rly::TObject mario, m4rly::TObject*& brick, m4rly::TObject*& moving, int& brickLength, int& movingLength, int& score, int level, int maxLvl) {
+void m4rly::model::marioCollision(
+	m4rly::TObject mario, 
+	m4rly::TObject*& brick, m4rly::TObject*& moving, 
+	int& brickLength, int& movingLength, int& score, 
+	int level, int maxLvl
+) 
+{
 	for (int i = 0; i < movingLength; i++) 
 	{ 
 		if (m4rly::model::isCollision(mario, moving[i])) 
@@ -186,7 +218,12 @@ void m4rly::model::marioCollision(m4rly::TObject mario, m4rly::TObject*& brick, 
 }
 
 
-void m4rly::model::playerDead(m4rly::TObject& mario, m4rly::TObject*& brick, m4rly::TObject*& moving, int& brickLength, int& movingLength, int level, int maxLvl, int& score) 
+void m4rly::model::playerDead(
+	m4rly::TObject& mario, 
+	m4rly::TObject*& brick, m4rly::TObject*& moving, 
+	int& brickLength, int& movingLength, 
+	int level, int maxLvl, int& score
+) 
 {
 	system("color 4F");
 	Sleep(500);
@@ -200,7 +237,12 @@ void m4rly::model::setObjectPos(m4rly::TObject* obj, float xPos, float yPos)
 	(*obj).y = yPos;
 }
 
-void m4rly::model::vertMoveObject(m4rly::TObject* obj, m4rly::TObject& mario, m4rly::TObject*& brick, m4rly::TObject*& moving, int& brickLength, int& movingLength, int& score, int& level, int maxLvl) 
+void m4rly::model::vertMoveObject(
+	m4rly::TObject* obj, m4rly::TObject& mario, 
+	m4rly::TObject*& brick, m4rly::TObject*& moving, 
+	int& brickLength, int& movingLength, int& score, 
+	int& level, int maxLvl
+) 
 {
 	(*obj).IsFly = true;
 	(*obj).vertSpeed += 0.05;

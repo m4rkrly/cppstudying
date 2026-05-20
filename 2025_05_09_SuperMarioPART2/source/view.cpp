@@ -1,8 +1,8 @@
+#include <iostream>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
-#include <iostream>
 
 #include "view.hpp"
 #include "config.hpp"
@@ -23,7 +23,10 @@ bool m4rly::view::isPosInMap(int x, int y)
 }
 
 
-void m4rly::view::putObjectOnMap(m4rly::TObject obj, char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]) 
+void m4rly::view::putObjectOnMap(
+	m4rly::TObject obj, 
+	char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]
+) 
 {
 	int ix = (int)round(obj.x);
 	int iy = (int)round(obj.y);
@@ -37,7 +40,10 @@ void m4rly::view::putObjectOnMap(m4rly::TObject obj, char map[m4rly::cfg::mapHei
 }
 
 
-void m4rly::view::putScoreOnMap(int& score, char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]) 
+void m4rly::view::putScoreOnMap(
+	int& score, 
+	char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1]
+) 
 {
 	char c[30];
 	sprintf(c, "Score: %d", score);

@@ -22,7 +22,12 @@ int main()
 	int maxLvl;
 	int score;
 
-	m4rly::model::createLevel(mario, brick, moving, brickLength, movingLength, level, maxLvl, score);
+	m4rly::model::createLevel(
+		mario, 
+		brick, moving, 
+		brickLength, movingLength, 
+		level, maxLvl, score
+	);
 
 	do 
 	{
@@ -31,22 +36,56 @@ int main()
 		if ((mario.IsFly == false) && (GetAsyncKeyState(VK_SPACE) < 0))
 			mario.vertSpeed = -1;
 		if (GetAsyncKeyState('A') < 0) 
-			m4rly::model::horizonMoveMap(mario, brick, moving, brickLength, movingLength, 1);
+			m4rly::model::horizonMoveMap(
+				mario, 
+				brick, moving, 
+				brickLength, movingLength, 
+				1
+			);
 		if (GetAsyncKeyState('D') < 0) 
-			m4rly::model::horizonMoveMap(mario, brick, moving, brickLength, movingLength, -1);
+			m4rly::model::horizonMoveMap(
+				mario, 
+				brick, moving, 
+				brickLength, movingLength, 
+				-1
+			);
 
 		if (mario.y > m4rly::cfg::mapHeight)
-		 	m4rly::model::playerDead(mario, brick, moving, brickLength, movingLength, level, maxLvl, score); 
+		 	m4rly::model::playerDead(
+				mario, 
+				brick, moving, 
+				brickLength, movingLength, 
+				level, maxLvl, score
+			); 
 
-		m4rly::model::vertMoveObject(&mario, mario, brick, moving, brickLength, movingLength, score, level, maxLvl);
-		m4rly::model::marioCollision(mario, brick, moving, brickLength, movingLength, score, level, maxLvl);
+		m4rly::model::vertMoveObject(
+			&mario, 
+			mario, brick, moving, 
+			brickLength, movingLength, score, level, maxLvl
+		);
+		m4rly::model::marioCollision(
+			mario, 
+			brick, moving, 
+			brickLength, movingLength, 
+			score, level, maxLvl
+		);
 
 		for (int i = 0; i < brickLength; i++) 
 			m4rly::view::putObjectOnMap(brick[i], map);
 		for (int i = 0; i < movingLength; i++) 
 		{
-			m4rly::model::vertMoveObject(moving + i, mario, brick, moving, brickLength, movingLength, score, level, maxLvl);
-			m4rly::model::horizonMoveObject(moving + i, mario, brick, moving, brickLength, movingLength, score, level, maxLvl);
+			m4rly::model::vertMoveObject(
+				moving + i, mario, 
+				brick, moving, 
+				brickLength, movingLength, 
+				score, level, maxLvl
+			);
+			m4rly::model::horizonMoveObject(
+				moving + i, mario, 
+				brick, moving, 
+				brickLength, movingLength, 
+				score, level, maxLvl
+			);
 			if (moving[i].y > m4rly::cfg::mapHeight) 
 			{
 				m4rly::model::deleteMoving(i, moving, movingLength);
