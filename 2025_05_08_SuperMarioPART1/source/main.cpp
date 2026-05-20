@@ -84,7 +84,6 @@ void VertMoveObject(TObject *obj) {
 			}
 			(*obj).y -= (*obj).vertSpeed;
 			(*obj).vertSpeed = 0;
-			(*obj).IsFly = false;
 			
 			if (brick[i].cType == '+') {
 				level += 1;
