@@ -1,11 +1,16 @@
 #pragma once
 
 #include "objects.hpp"
+
+
 namespace m4rkrly {
     class Goomba : public NPC 
     {
         public:
-            Goomba(float x, float y, float hSpeed, float vSpeed);
+            Goomba(
+                float x, float y, 
+                float hSpeed, float vSpeed
+            );
             int collisionMario(Player mario) override;      
     };
 

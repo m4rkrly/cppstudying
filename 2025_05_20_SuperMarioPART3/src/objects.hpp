@@ -12,7 +12,7 @@ namespace m4rkrly
             char texture;
 
         public:
-            Object() = delete;
+            Object();
             Object(
                 float x, float y, 
                 float width, float height, 
@@ -26,7 +26,7 @@ namespace m4rkrly
 
             void setPos(float x, float y);
 
-            void putOnMap(m4rkrly::Map map);
+            void putOnMap(m4rkrly::Map& map);
     };
 
     class Moving : public Object {
@@ -53,14 +53,14 @@ namespace m4rkrly
     class Interactive : public Object
     {
         public:
-            Interactive() = delete;
+            Interactive();
             Interactive(
                 float x, float y, 
                 float width, float height, 
                 char texture
             );
 
-            virtual void collisionMario() = 0;
+            virtual int collisionMario();
     };
 
     class Player : public Moving 
@@ -69,13 +69,13 @@ namespace m4rkrly
             bool isFlying;
 
         public:
-            Player() = delete;
+            Player();
             Player(float x, float y);
 
             Player(const Player&) = delete;
             Player& operator = (const Player&) = delete;
-            Player(Player&&) = delete;
-            Player& operator = (Player&&) = delete;
+            Player(Player&&) = default;
+            Player& operator = (Player&&) = default;
     };
 
 
@@ -85,17 +85,16 @@ namespace m4rkrly
             int price;
 
         public:
-            NPC() = delete;
+            NPC();
             NPC(
                 float x, float y, 
                 float width, float height, 
                 char texture, 
-                float hSpeed, float vSpeed
+                float hSpeed, float vSpeed,
+                int price
             );
 
             int getPrice() const;
-
-            virtual int collisionMario(Player mario) = 0;
-
+            virtual int collisionMario(Player mario);
     };
 }

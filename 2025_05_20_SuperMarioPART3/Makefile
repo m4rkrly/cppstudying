@@ -1,2 +1,2 @@
-mario: .\src\main.cpp .\src\init.hpp .\src\map.cpp .\src\map.hpp
-	g++ .\src\main.cpp .\src\init.hpp .\src\map.cpp .\src\map.hpp -o mario.exe
+mario: .\src\main.cpp .\src\init.hpp .\src\map.cpp .\src\map.hpp .\src\objects.cpp .\src\objects.hpp .\src\derived.cpp .\src\derived.hpp .\src\level.cpp .\src\level.hpp 
+	g++ .\src\main.cpp .\src\init.hpp .\src\map.cpp .\src\map.hpp .\src\objects.cpp .\src\objects.hpp .\src\derived.cpp .\src\derived.hpp .\src\level.cpp .\src\level.hpp -o mario.exe

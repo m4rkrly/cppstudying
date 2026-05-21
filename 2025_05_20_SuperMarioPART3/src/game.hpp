@@ -7,10 +7,9 @@ namespace m4rkrly
     class Game final
     {
         private:
-            m4rkrly::Level* lvlList;
-            int lvlSize;
-            int level;
-
+            m4rkrly::Level level;
+            m4rkrly::Map map;
+            
         public:
             Game();
 
