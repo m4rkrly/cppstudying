@@ -1,8 +1,10 @@
 #pragma once
 
+#include "map.hpp"
 #include "objects.hpp"
 
-namespace m4rkrly {
+namespace m4rkrly 
+{
     class Level
     {
         private:

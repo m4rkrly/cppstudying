@@ -2,7 +2,8 @@
 
 #include "init.hpp"
 
-namespace m4rkrly {
+namespace m4rkrly 
+{
     class Map
     {
         private:

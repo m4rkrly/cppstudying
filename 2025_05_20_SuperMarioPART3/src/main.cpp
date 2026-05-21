@@ -7,7 +7,7 @@
 
 int main()
 {
-    
-
+    m4rkrly::Game game;
+    game.playGame();
     return 0;
 }

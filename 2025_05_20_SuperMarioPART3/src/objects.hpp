@@ -1,19 +1,23 @@
 #pragma once
 
-#include "level.hpp"
 #include "map.hpp"
 
-namespace m4rkrly {
+namespace m4rkrly 
+{
     class Object
     {
         private:
             float x, y;
             float width, height;
-            char type;
+            char texture;
 
         public:
             Object() = delete;
-            Object(float x, float y, float width, float height, char type);
+            Object(
+                float x, float y, 
+                float width, float height, 
+                char texture
+            );
             
             float getX() const;
             float getY() const;
@@ -31,6 +35,14 @@ namespace m4rkrly {
             float hSpeed;
         
         public:
+            Moving() = delete;
+            Moving(
+                float x, float y, 
+                float width, float height, 
+                char texture, 
+                float vSpeed, float hSpeed
+            );
+
             float getVSpeed() const;
             float getHSpeed() const;
 
@@ -42,24 +54,14 @@ namespace m4rkrly {
     {
         public:
             Interactive() = delete;
-            Interactive(float x, float y, float width, float height, char type);
+            Interactive(
+                float x, float y, 
+                float width, float height, 
+                char texture
+            );
 
             virtual void collisionMario() = 0;
     };
-
-    // Зачем нужен этот класс?
-    // В Level имеем три динамических массива.
-    // Если сделать один из них под базовый класс object
-    // то рискуем иметь возможность закидывать туда 
-    // вообще любые производные классы, что плохо.
-    // Так блоки всегда будут только блоками.
-    class NonInteractive : public Object {
-        public:
-            NonInteractive() = delete;
-            NonInteractive(float x, float y, float width, float height, char type);
-    };
-
-
 
     class Player : public Moving 
     {
@@ -68,7 +70,7 @@ namespace m4rkrly {
 
         public:
             Player() = delete;
-            Player(float x, float y, float width, float height, char type, float vSpeed);
+            Player(float x, float y);
 
             Player(const Player&) = delete;
             Player& operator = (const Player&) = delete;
@@ -84,25 +86,16 @@ namespace m4rkrly {
 
         public:
             NPC() = delete;
-            NPC(float x, float y, float width, float height, char type, float hSpeed, float vSpeed);
+            NPC(
+                float x, float y, 
+                float width, float height, 
+                char texture, 
+                float hSpeed, float vSpeed
+            );
 
             int getPrice() const;
 
             virtual int collisionMario(Player mario) = 0;
 
-    };
-
-    class Goomba : public NPC 
-    {
-        public:
-            Goomba(float x, float y, float hSpeed, float vSpeed);
-            int collisionMario(Player mario) override;      
-    };
-
-    class Coin : public NPC 
-    {
-        public:
-            Coin(float x, float y, float hSpeed, float vSpeed);
-            int collisionMario(Player mario) override;
     };
 }
