@@ -26,7 +26,7 @@ namespace m4rkrly
 
             void setPos(float x, float y);
 
-            void draw(m4rkrly::Map map);
+            void putOnMap(m4rkrly::Map map);
     };
 
     class Moving : public Object {

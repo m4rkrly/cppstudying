@@ -7,10 +7,10 @@ namespace m4rkrly
     class Map
     {
         private:
-            char map; // Поменяй на map[height][width]
+            char map[MAPHEIGHT][MAPWIDTH + 1]; // Поменяй на map[height][width]
 
         public:
-            Map();
+            Map() = default;
 
             Map(const Map&) = delete;
             Map& operator = (const Map&) = delete;
@@ -18,10 +18,10 @@ namespace m4rkrly
             Map& operator = (Map&&) = delete;
 
             void clearMap();
-            bool isPosInMap();
-            void putObjOnMap();
-            void putScoreOnMap();
-            void setCur();
+            bool isPosOnMap(int x, int y);
+            void putSymbol(int x, int y, char texture);
+            void putScoreOnMap(int& score);
+            void returnCur();
             void showMap();
     };
 }

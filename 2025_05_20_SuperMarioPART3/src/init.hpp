@@ -1,8 +1,5 @@
 #pragma once
 
-#include "level.hpp"
-#include "objects.hpp"
-
 const int MAPHEIGHT = 25;
 const int MAPWIDTH = 80;
 

@@ -65,5 +65,5 @@ void m4rly::view::showMap(char map[m4rly::cfg::mapHeight][m4rly::cfg::mapWidth+1
 {
 	map[m4rly::cfg::mapHeight - 1][m4rly::cfg::mapWidth - 1] = '\0';
 	for (int j = 0; j < m4rly::cfg::mapHeight; j++)
-		std::cout << map[j] << '\0';
+		std::cout << map[j];
 }

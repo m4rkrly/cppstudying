@@ -1,0 +1,2 @@
+mario: .\source\main.cpp .\source\structs.hpp .\source\config.hpp .\source\view.cpp .\source\view.hpp .\source\model.hpp .\source\model.cpp
+	g++ .\source\main.cpp .\source\structs.hpp .\source\config.hpp .\source\view.cpp .\source\view.hpp .\source\model.hpp .\source\model.cpp -o mario.exe
