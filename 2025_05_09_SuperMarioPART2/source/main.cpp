@@ -38,7 +38,7 @@ int main()
 		if (GetAsyncKeyState('A') < 0) 
 			m4rly::model::horizonMoveMap(
 				mario, 
-				brick, moving, 
+				brick, moving,  
 				brickLength, movingLength, 
 				1
 			);
