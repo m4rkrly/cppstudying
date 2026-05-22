@@ -36,6 +36,18 @@ void m4rkrly::Object::setPos(float x, float y)
     this->y = y;
 }
 
+void m4rkrly::Object::changePos(float dx, float dy)
+{
+    x += dx;
+    y += dy;
+}
+
+bool m4rkrly::Object::isCollidingWith(Object& other)
+{
+    bool collisionX = (x + width > other.x) && (x < (other.x + other.width));
+    bool collisionY = ((y + height) > other.y) && (y < (other.y + other.height));
+    return collisionX && collisionY;
+}
 
 void m4rkrly::Object::putOnMap(m4rkrly::Map& map)
 {
@@ -65,6 +77,8 @@ m4rkrly::Moving::Moving(
 
 float m4rkrly::Moving::getVSpeed() const { return vSpeed; }
 float m4rkrly::Moving::getHSpeed() const { return vSpeed; }
+bool m4rkrly::Moving::getIsFlying() const { return isFlying; }
+
 
 void m4rkrly::Moving::setVSpeed(float vSpeed) {
     this->vSpeed = vSpeed;
@@ -72,6 +86,40 @@ void m4rkrly::Moving::setVSpeed(float vSpeed) {
 void m4rkrly::Moving::setHSpeed(float hSpeed) {
     this->hSpeed = hSpeed;
 }
+
+void m4rkrly::Moving::setIsFlying(bool isFlying) 
+{ 
+    this->isFlying = isFlying;
+}
+
+void m4rkrly::Moving::changeVSpeed(float dVSpeed)
+{
+    this->vSpeed += dVSpeed;
+}
+
+void m4rkrly::Moving::changeHSpeed(float dHSpeed)
+{
+    this->hSpeed += dHSpeed;
+}
+
+void m4rkrly::Moving::changePosOnVSpeed(float multiplier)
+{
+    changePos(0, vSpeed*multiplier);
+}
+
+void m4rkrly::Moving::changePosOnHSpeed(float multiplier)
+{
+    changePos(hSpeed*multiplier, 0);
+}
+
+void m4rkrly::Moving::jump(float vSpeed) 
+{
+    if (isFlying != true)
+        this-> vSpeed = vSpeed;    
+}
+
+
+
 
 
 m4rkrly::Interactive::Interactive() : Object() {}
@@ -89,12 +137,15 @@ int m4rkrly::Interactive::collisionMario()
 
 // Возможно стоит создать возможность задавать размеры Марио в init
 m4rkrly::Player::Player()
-    : Moving(0, 0, 3, 3, '@', 0, 0), isFlying(false) {}
+    : Moving(0, 0, 3, 3, '@', 0, 0) {}
 
 
 m4rkrly::Player::Player(float x, float y)
-    : Moving(x, y, 3, 3, '@', 0, 0), isFlying(false) {}
+    : Moving(x, y, 3, 3, '@', 0, 0) {}
 //
+
+
+
 
 
 m4rkrly::NPC::NPC() 

@@ -1,5 +1,6 @@
 #include <cmath>
 #include <cstdio>
+#include <cstdlib>
 #include <iostream>
 #include <windows.h>
 
@@ -9,23 +10,24 @@
 void m4rkrly::Map::clearMap() 
 {
     for (int i = 0; i < MAPWIDTH;  i++) 
-		this->map[0][i] = '.';
-	this->map[0][MAPWIDTH] = '\0';
+		map[0][i] = '.';
+	map[0][MAPWIDTH] = '\0';
 	for (int j = 1; j < MAPHEIGHT; j++)
-		sprintf(this->map[j], this->map[0]);
+		sprintf(map[j], map[0]);
 }
 
 
 bool m4rkrly::Map::isPosOnMap(int x, int y) 
 {
-    return ((x >= 0) && (x < MAPWIDTH)) &&
-        ((y >= 0) && (y < MAPHEIGHT));
+    bool xIsOnMap = (x >= 0) && (x < MAPWIDTH);
+	bool yIsOnMap = (y >= 0) && (y < MAPHEIGHT);
+	return xIsOnMap && yIsOnMap;
 }
 
 
 void m4rkrly::Map::putSymbol(int x, int y, char texture) 
 {
-    this->map[x][y] = texture;
+    this->map[y][x] = texture;
 }
 
 

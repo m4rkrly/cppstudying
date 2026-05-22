@@ -1,8 +1,10 @@
+#include <iostream>
 #include <windows.h>
 
 #include "map.hpp"
 #include "level.hpp"
 #include "objects.hpp"
+#include "derived.hpp"
 
 m4rkrly::Level::Level() 
 {
@@ -26,6 +28,65 @@ m4rkrly::Level::~Level()
     score = 0;
 }
 
+int m4rkrly::Level::playLevel()
+{
+    if (GetAsyncKeyState(VK_SPACE) < 0)
+        mario.jump(-1);
+
+    if (GetAsyncKeyState('A') < 0)
+        horizMoveMap(-1);
+
+    if (GetAsyncKeyState('D') < 0)
+        horizMoveMap(1);
+
+    verticMoveObj(mario);
+    
+    return 0;
+}
+
+void m4rkrly::Level::verticMoveObj(Moving& obj)
+{
+    obj.setIsFlying(true);
+    obj.changeVSpeed(0.05);
+    obj.changePosOnVSpeed(1);
+    
+    for (int i = 0; i < brickSize; i++) 
+    {
+        if (obj.isCollidingWith(brickList[i]))
+        {
+            if (obj.getVSpeed() > 0)
+                obj.setIsFlying(false);
+            
+            obj.changePosOnVSpeed(-1);
+            obj.setVSpeed(0);
+            break;
+        }
+        
+    }
+} 
+
+void m4rkrly::Level::horizMoveMap(float dx)
+{
+    mario.changePos(dx, 0);
+    for (int i = 0; i < brickSize; i++) 
+    {
+        if (mario.isCollidingWith(brickList[i]))
+        {
+            mario.changePos(-dx, 0);
+            return;
+        }
+    }     
+    mario.changePos(-dx, 0);
+
+    for (int i = 0; i < brickSize; i++)
+        brickList[i].changePos(-dx, 0);
+    for (int i = 0; i < interactSize; i++)
+        interactList[i].changePos(-dx, 0);
+    for (int i = 0; i < npcSize; i++)
+        npcList[i].changePos(-dx, 0);
+}
+
+
 void m4rkrly::Level::createLevel(int level) {
     npcList = nullptr;
     interactList = nullptr;
@@ -39,26 +100,41 @@ void m4rkrly::Level::createLevel(int level) {
     system("color 9F");
     this->mario = Player(39, 10);
 
-    switch(lvl)
+    switch(level)
     {
+
+        // TODO
         case 1:
-            addNewBrick(m4rkrly::Object(20, 20, 40, 5, '#'), brickList, brickSize);
+            addNewBrick(Object(20, 20, 40, 5, '#'));
+            addNewNPC(Goomba(25, 10, 0.2, 0));
             break;
         case 2:
             break;
         case 3:
             break;
     }
-    
 }
 
-m4rkrly::NPC* m4rkrly::Level::addNewNPC(
-    m4rkrly::NPC newNpc,  
-    m4rkrly::NPC* npcList, int& npcSize
+void m4rkrly::Level::putObjectsOnMap(Map& map)
+{   
+    mario.putOnMap(map);
+
+    for (int i = 0; i < brickSize; i++) 
+        brickList[i].putOnMap(map);   
+
+    for (int i = 0; i < interactSize; i++) 
+        interactList[i].putOnMap(map);
+
+    for (int i = 0; i < npcSize; i++) 
+        npcList[i].putOnMap(map);
+}
+
+void m4rkrly::Level::addNewNPC(
+    NPC newNpc
 )
 {
     npcSize++;
-    m4rkrly::NPC* temp = new m4rkrly::NPC[npcSize];
+    NPC* temp = new NPC[npcSize];
 
     if (npcList != nullptr) {
         for (int i = 0; i < npcSize - 1; i++) 
@@ -72,13 +148,12 @@ m4rkrly::NPC* m4rkrly::Level::addNewNPC(
 }
 
 
-m4rkrly::Interactive* m4rkrly::Level::addNewInteractive(
-    m4rkrly::Interactive newInter, 
-    m4rkrly::Interactive* interactList, int& interactSize
+void m4rkrly::Level::addNewInteractive(
+    Interactive newInter
 )
 {
     interactSize++;
-    m4rkrly::Interactive* temp = new m4rkrly::Interactive[interactSize];
+    Interactive* temp = new Interactive[interactSize];
 
     if (interactList != nullptr) {
         for (int i = 0; i < interactSize - 1; i++) 
@@ -92,13 +167,12 @@ m4rkrly::Interactive* m4rkrly::Level::addNewInteractive(
 }
 
 
-m4rkrly::Object* m4rkrly::Level::addNewBrick(
-    m4rkrly::Object newBrick, 
-    m4rkrly::Object* brickList, int& brickSize
+void m4rkrly::Level::addNewBrick(
+    Object newBrick
 )
 {
     brickSize++;
-    m4rkrly::Object* temp = new m4rkrly::Object[brickSize];
+    Object* temp = new Object[brickSize];
 
     if (brickList != nullptr) 
     {

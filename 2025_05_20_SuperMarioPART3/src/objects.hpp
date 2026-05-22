@@ -25,6 +25,9 @@ namespace m4rkrly
             float getHeight() const;
 
             void setPos(float x, float y);
+            void changePos(float dx, float dy);
+
+            bool isCollidingWith(Object& other);
 
             void putOnMap(m4rkrly::Map& map);
     };
@@ -33,6 +36,7 @@ namespace m4rkrly
         private:
             float vSpeed;
             float hSpeed;
+            bool isFlying = false;
         
         public:
             Moving() = delete;
@@ -45,9 +49,20 @@ namespace m4rkrly
 
             float getVSpeed() const;
             float getHSpeed() const;
+            bool getIsFlying() const;
 
             void setVSpeed(float vSpeed);
             void setHSpeed(float hSpeed);
+            void setIsFlying(bool isFlying);
+
+            void changeVSpeed(float dVSpeed);
+            void changeHSpeed(float dHSpeed);
+
+            void changePosOnVSpeed(float multiplier);
+            void changePosOnHSpeed(float multiplier);
+
+            void jump(float vSpeed);
+            
     };
 
     class Interactive : public Object
@@ -65,9 +80,6 @@ namespace m4rkrly
 
     class Player : public Moving 
     {
-        private:
-            bool isFlying;
-
         public:
             Player();
             Player(float x, float y);

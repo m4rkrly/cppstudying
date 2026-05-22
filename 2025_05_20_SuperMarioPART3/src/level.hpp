@@ -8,10 +8,10 @@ namespace m4rkrly
     class Level
     {
         private:
-            m4rkrly::NPC* npcList;
-            m4rkrly::Interactive* interactList;
-            m4rkrly::Object* brickList;
-            m4rkrly::Player mario;
+            NPC* npcList;
+            Interactive* interactList;
+            Object* brickList;
+            Player mario;
 
             int npcSize;
             int interactSize;
@@ -35,30 +35,27 @@ namespace m4rkrly
 
             int playLevel();
             void createLevel(int level);
-            void putObjectsOnMap(m4rkrly::Map map);
-            void putScoreOnMap(m4rkrly::Map map);
+            void putObjectsOnMap(Map& map);
+            void putScoreOnMap(Map& map);
         
         private:
-            void horizMoveMap();
+            void horizMoveMap(float dx);
             int marioCollision(); 
             bool isColliding();
             void increaseScore();
 
             void horizMoveObj();
-            void verticMoveObj();
+            void verticMoveObj(Moving& obj);
             bool isOutOfBounds();
 
-            m4rkrly::NPC* addNewNPC(
-                m4rkrly::NPC newNpc,  
-                m4rkrly::NPC* npcList, int& npcSize
+            void addNewNPC(
+                NPC newNpc
             );
-            m4rkrly::Interactive* addNewInteractive(
-                m4rkrly::Interactive newInter, 
-                m4rkrly::Interactive* interactList, int& interactSize
+            void addNewInteractive(
+                Interactive newInter
             );
-            m4rkrly::Object* addNewBrick(
-                m4rkrly::Object newBrick, 
-                m4rkrly::Object* brickList, int& brickSize
+            void addNewBrick(
+                Object newBrick 
             );
     };
 }
