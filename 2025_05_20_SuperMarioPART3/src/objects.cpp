@@ -44,7 +44,7 @@ void m4rkrly::Object::changePos(float dx, float dy)
 
 bool m4rkrly::Object::isCollidingWith(Object& other)
 {
-    bool collisionX = (x + width > other.x) && (x < (other.x + other.width));
+    bool collisionX = ((x + width > other.x) && (x < (other.x + other.width)));
     bool collisionY = ((y + height) > other.y) && (y < (other.y + other.height));
     return collisionX && collisionY;
 }
@@ -75,41 +75,19 @@ m4rkrly::Moving::Moving(
     this->hSpeed = hSpeed;
 }
 
-float m4rkrly::Moving::getVSpeed() const { return vSpeed; }
-float m4rkrly::Moving::getHSpeed() const { return vSpeed; }
-bool m4rkrly::Moving::getIsFlying() const { return isFlying; }
-
-
-void m4rkrly::Moving::setVSpeed(float vSpeed) {
-    this->vSpeed = vSpeed;
-}
-void m4rkrly::Moving::setHSpeed(float hSpeed) {
-    this->hSpeed = hSpeed;
-}
-
-void m4rkrly::Moving::setIsFlying(bool isFlying) 
-{ 
-    this->isFlying = isFlying;
-}
-
-void m4rkrly::Moving::changeVSpeed(float dVSpeed)
+void m4rkrly::Moving::applyGravity(float dVSpeed)
 {
-    this->vSpeed += dVSpeed;
+    isFlying = true;
+    vSpeed += dVSpeed;
+    changePos(0, vSpeed);
 }
 
-void m4rkrly::Moving::changeHSpeed(float dHSpeed)
+void m4rkrly::Moving::discardGravity()
 {
-    this->hSpeed += dHSpeed;
-}
-
-void m4rkrly::Moving::changePosOnVSpeed(float multiplier)
-{
-    changePos(0, vSpeed*multiplier);
-}
-
-void m4rkrly::Moving::changePosOnHSpeed(float multiplier)
-{
-    changePos(hSpeed*multiplier, 0);
+    if (vSpeed > 0)
+        isFlying = false;
+    changePos(0, -vSpeed);
+    vSpeed = 0;
 }
 
 void m4rkrly::Moving::jump(float vSpeed) 

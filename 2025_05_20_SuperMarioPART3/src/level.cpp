@@ -44,38 +44,62 @@ int m4rkrly::Level::playLevel()
     return 0;
 }
 
-void m4rkrly::Level::verticMoveObj(Moving& obj)
+void m4rkrly::Level::verticMoveObj(Moving& mov)
 {
-    obj.setIsFlying(true);
-    obj.changeVSpeed(0.05);
-    obj.changePosOnVSpeed(1);
+    mov.applyGravity(0.05);
     
-    for (int i = 0; i < brickSize; i++) 
+    for (int i = 0; i < brickSize; i++)
     {
-        if (obj.isCollidingWith(brickList[i]))
+    // Возможно стоит убрать повторяющийся код
+        if (mov.isCollidingWith(brickList[i]))
         {
-            if (obj.getVSpeed() > 0)
-                obj.setIsFlying(false);
-            
-            obj.changePosOnVSpeed(-1);
-            obj.setVSpeed(0);
+            mov.discardGravity();
             break;
         }
-        
     }
+
+    for (int i = 0; i < interactSize; i++)
+    {
+        if (mov.isCollidingWith(interactList[i]))
+        {
+            mov.discardGravity();
+            break;
+        }
+    }
+    //
+
 } 
 
 void m4rkrly::Level::horizMoveMap(float dx)
 {
     mario.changePos(dx, 0);
+
+    bool collidingWithBrick = false;
+    bool collidingWithInter = false;
     for (int i = 0; i < brickSize; i++) 
     {
         if (mario.isCollidingWith(brickList[i]))
         {
-            mario.changePos(-dx, 0);
-            return;
+            collidingWithBrick = true;
+            break;
         }
-    }     
+    }  
+
+    for (int i = 0; i < interactSize; i++)
+    {
+        if (mario.isCollidingWith(interactList[i]))
+        {
+            collidingWithInter = true;
+            //interactList[i].collisionMario(mario);
+            break;
+        }
+    }
+    
+    if (collidingWithBrick or collidingWithInter)
+    {
+        mario.changePos(-dx, 0);
+        return;
+    }
     mario.changePos(-dx, 0);
 
     for (int i = 0; i < brickSize; i++)
@@ -106,6 +130,7 @@ void m4rkrly::Level::createLevel(int level) {
         // TODO
         case 1:
             addNewBrick(Object(20, 20, 40, 5, '#'));
+            addNewInteractive(Interactive(25, 15, 3, 3, '!'));
             addNewNPC(Goomba(25, 10, 0.2, 0));
             break;
         case 2:

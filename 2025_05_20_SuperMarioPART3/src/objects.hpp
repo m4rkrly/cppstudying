@@ -47,19 +47,8 @@ namespace m4rkrly
                 float vSpeed, float hSpeed
             );
 
-            float getVSpeed() const;
-            float getHSpeed() const;
-            bool getIsFlying() const;
-
-            void setVSpeed(float vSpeed);
-            void setHSpeed(float hSpeed);
-            void setIsFlying(bool isFlying);
-
-            void changeVSpeed(float dVSpeed);
-            void changeHSpeed(float dHSpeed);
-
-            void changePosOnVSpeed(float multiplier);
-            void changePosOnHSpeed(float multiplier);
+            void applyGravity(float dVSpeed);
+            void discardGravity();
 
             void jump(float vSpeed);
             
