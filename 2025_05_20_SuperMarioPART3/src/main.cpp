@@ -20,6 +20,8 @@ int main()
             map.clearMap();
             st = lvl.playLevel();
             
+            if (st == EXIT) break;
+            
             // if (st == WIN) nextLevel();
 
             lvl.putObjectsOnMap(map);

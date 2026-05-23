@@ -63,8 +63,8 @@ m4rkrly::Level::~Level()
 
 Status m4rkrly::Level::playLevel()
 {
-    //if (GetAsyncKeyState(VK_ESCAPE) < 0) 
-    //    return EXIT;
+    if (GetAsyncKeyState(VK_ESCAPE) < 0) 
+        return EXIT;
 
     if (GetAsyncKeyState(VK_SPACE) < 0)
         mario.jump(-1);
@@ -86,11 +86,12 @@ Status m4rkrly::Level::playLevel()
     for (int i = 0; i < npcSize; i++)
     {
         moveNPC(npcList[i]);
-        if (npcList[i]->isFallen() == true)
-        // Здесь почему-то падает в бесконечный цикл
+        if (npcList[i]->isFallen() == true) 
+        {
             deleteFromList(i, npcList, npcSize);
-            //i--;
-            //continue;
+            i--;
+            continue;
+        }
     }
 
     Status marioStatus = marioCollision();
