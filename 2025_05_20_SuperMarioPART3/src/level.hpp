@@ -31,6 +31,9 @@ namespace m4rkrly
             Level(Level&& other) = default;
             Level& operator = (Level&& other) = default;
 
+
+            
+
             ~Level();
 
             int playLevel();
@@ -49,6 +52,9 @@ namespace m4rkrly
             void verticMoveObj(Moving& obj);
             bool isOutOfBounds();
 
+            template <typename T>
+            void deleteList(T**& l, int& lSize);
+
             void addNewNPC(
                 NPC* newNpc
             );
@@ -58,7 +64,6 @@ namespace m4rkrly
             void addNewBrick(
                 Object* newBrick 
             );
-            template <typename T>
-            void deleteList(T**& l, int& lSize);
+            
     };
 }

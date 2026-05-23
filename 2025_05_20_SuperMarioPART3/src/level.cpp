@@ -17,7 +17,7 @@ template <typename T>
 void m4rkrly::Level::deleteList(T**& l, int& lSize)
 {
     if (l == nullptr) return;
-    
+
     for (int i = 0; i < lSize; i++)
     {
         delete l[i];
@@ -181,7 +181,7 @@ void m4rkrly::Level::createLevel(int level) {
         // TODO
         case 1:
             addNewBrick(new Object(20, 20, 40, 5, '#'));
-            addNewInteractive(new Interactive(25, 15, 3, 3, '!'));
+            addNewInteractive(new LuckyBlock(25, 15));
             addNewNPC(new Goomba(25, 10, 0.2, 0));
             break;
         case 2:

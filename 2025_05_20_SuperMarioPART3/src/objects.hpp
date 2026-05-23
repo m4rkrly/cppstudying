@@ -28,20 +28,6 @@ namespace m4rkrly
     };
 
 
-    class Interactive : public Object
-    {
-        public:
-            Interactive() = delete;
-            Interactive(
-                float x, float y, 
-                float width, float height, 
-                char texture
-            );
-            virtual ~Interactive() = default;
-
-            virtual int collisionMario();
-    };
-
     class Moving : public Object {
         protected:
             float vSpeed;
@@ -64,6 +50,39 @@ namespace m4rkrly
     };
 
 
+
+    class Player : public Moving 
+    {
+        public:
+            Player();
+            Player(float x, float y);
+
+            Player(const Player&) = delete;
+            Player& operator = (const Player&) = delete;
+            Player(Player&&) = default;
+            Player& operator = (Player&&) = default;
+        
+        void jump(float vSpeed);
+    };
+
+
+
+    class Interactive : public Object
+    {
+        public:
+            Interactive() = delete;
+            Interactive(
+                float x, float y, 
+                float width, float height, 
+                char texture
+            );
+            virtual ~Interactive() = default;
+
+            virtual int collisionMario(Player mario) = 0;
+    };
+
+
+    
     class NPC : public Moving
     {
         private:
@@ -80,11 +99,13 @@ namespace m4rkrly
             );
             virtual ~NPC() = default;
 
-            virtual int collisionMario(Player mario);
+            virtual int collisionMario(Player mario) = 0;
             virtual bool decide(NPC& temp);
             int getPrice() const;
             void move();
             void discardMove();
             void changeDirection();
     };
+
+    
 }
