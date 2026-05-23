@@ -49,23 +49,13 @@ int m4rkrly::Level::playLevel()
     
     for (int i = 0; i < npcSize; i++)
     {
-        NPC* temp = npcList[i];
-        horizonMoveNPC(*temp);
-        verticMoveObj(*temp);
-
-        if (npcList[i]->decide(*temp) == false)
-        {   
-            npcList[i]->changeDirection();
-        }
-        
-        horizonMoveNPC(*npcList[i]);
-        verticMoveObj(*npcList[i]);
+    
     }
 
     return 0;
 }
 
-void m4rkrly::Level::horizonMoveNPC(NPC& npc)
+bool m4rkrly::Level::horizonMoveNPC(NPC& npc)
 {
     npc.move();
     bool brickCollision = false;
@@ -92,19 +82,22 @@ void m4rkrly::Level::horizonMoveNPC(NPC& npc)
     if (brickCollision || interactCollision)
     {
         npc.discardMove();
+        return true;
     }
+    return false;
 }
 
-void m4rkrly::Level::verticMoveObj(Moving& mov)
+bool m4rkrly::Level::verticMoveObj(Moving& mov)
 {
-    mov.applyGravity(0.05);
+    mov.applyGravity();
     
-    // Возможно стоит убрать повторяющийся код
+    bool brickCollision = false;
+    bool interactCollision = false;
     for (int i = 0; i < brickSize; i++)
     {
         if (mov.isCollidingWith(*brickList[i]))
         {
-            mov.discardGravity();
+            brickCollision = true;
             break;
         }
     }
@@ -113,10 +106,17 @@ void m4rkrly::Level::verticMoveObj(Moving& mov)
     {
         if (mov.isCollidingWith(*interactList[i]))
         {
-            mov.discardGravity();
+            interactCollision = true;
             break;
         }
     }
+    
+    if (brickCollision || interactCollision)
+    {
+        mov.discardGravity();
+        return true;
+    }
+    return false;
     //
 
 } 

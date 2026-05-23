@@ -12,7 +12,8 @@ namespace m4rkrly {
                 float x, float y, 
                 float hSpeed, float vSpeed
             );
-            bool decide(NPC& temp) override;
+            bool toMoveHoriz(bool isCollidingHoriz) override;
+            bool toMoveVertic(bool isCollidingVertic) override;
             int collisionMario(Player mario) override;      
     };
 

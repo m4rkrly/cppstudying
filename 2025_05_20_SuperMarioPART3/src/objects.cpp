@@ -71,10 +71,10 @@ bool m4rkrly::Moving::getIsFlying() const
     return isFlying;
 }
 
-void m4rkrly::Moving::applyGravity(float dVSpeed)
+void m4rkrly::Moving::applyGravity()
 {
     isFlying = true;
-    vSpeed += dVSpeed;
+    vSpeed += 0.05;
     changePos(0, vSpeed);
 }
 
@@ -130,7 +130,8 @@ m4rkrly::NPC::NPC(
 
 int m4rkrly::NPC::getPrice() const { return price; }
 
-bool m4rkrly::NPC::decide(NPC& temp) { return true; }
+bool m4rkrly::NPC::toMoveHoriz(bool isCollidingHoriz) { return true; }
+bool m4rkrly::NPC::toMoveVertic(bool isCollidingVertic) { return true; }
 
 void m4rkrly::NPC::move() { changePos(hSpeed, 0); }
 

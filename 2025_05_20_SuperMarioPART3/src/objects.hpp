@@ -45,7 +45,7 @@ namespace m4rkrly
             virtual ~Moving() = default;
 
             bool getIsFlying() const;
-            void applyGravity(float dVSpeed);
+            void applyGravity();
             void discardGravity();
     };
 
@@ -100,7 +100,9 @@ namespace m4rkrly
             virtual ~NPC() = default;
 
             virtual int collisionMario(Player mario) = 0;
-            virtual bool decide(NPC& temp);
+            virtual bool toMoveHoriz(bool isCollidingHoriz);
+            virtual bool toMoveVertic(bool isCollidingVertic);
+            
             int getPrice() const;
             void move();
             void discardMove();

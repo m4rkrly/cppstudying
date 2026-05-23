@@ -7,10 +7,15 @@ m4rkrly::Goomba::Goomba(
     float hSpeed, float vSpeed
 ) : NPC(x, y, 2, 2, 'o', hSpeed, vSpeed, 50) {}
 
-bool m4rkrly::Goomba::decide(NPC& temp)
+bool m4rkrly::Goomba::toMoveHoriz(bool isCollidingHoriz)
 {
-    if (temp.getIsFlying() == true)
-        return false;
+    if (isCollidingHoriz == true) { return false; }
+    return true;
+}
+
+bool m4rkrly::Goomba::toMoveVertic(bool isCollidingVertic)
+{
+    if (isCollidingVertic == false) { return false; }
     return true;
 }
 

@@ -31,9 +31,6 @@ namespace m4rkrly
             Level(Level&& other) = default;
             Level& operator = (Level&& other) = default;
 
-
-            
-
             ~Level();
 
             int playLevel();
@@ -42,14 +39,15 @@ namespace m4rkrly
             void putScoreOnMap(Map& map);
         
         private:
+            void moveNPC(NPC* npc);
             void horizMoveMario(float dx);
-            void horizonMoveNPC(NPC& npc);
+            bool horizonMoveNPC(NPC& npc);
             int marioCollision(); 
             bool isColliding();
             void increaseScore();
 
             void horizMoveObj();
-            void verticMoveObj(Moving& obj);
+            bool verticMoveObj(Moving& obj);
             bool isOutOfBounds();
 
             template <typename T>
