@@ -34,19 +34,17 @@ Status m4rkrly::Goomba::collisionMario(Player& mario)
 
 // LUCKYBLOCK CLASS
 m4rkrly::LuckyBlock::LuckyBlock(float x, float y) 
-    : Interactive(x, y, 4, 3, '?') {}
+    : Interactive(x, y, 5, 3, '?') {}
 
 Status m4rkrly::LuckyBlock::collisionMario(Player& mario)
 {
-    // bool collIsFromBottom = (mario.getY() > y + height);
-    // if (mario.getIsFlying() 
-    // && mario.getVSpeed() < 0 
-    // && collIsFromBottom)
-    // {
-    //     return SPAWN_COIN;
-    // }
-    //return NOTHING;
-    return SPAWN_COIN;
+    if (texture == '?')
+    {
+        if (mario.getVSpeed() < 0)
+        texture = '-';
+        return SPAWN_COIN;
+    }
+    return NOTHING;
 }
 // END OF LUCKYBLOCK CLASS
 
@@ -56,7 +54,7 @@ Status m4rkrly::LuckyBlock::collisionMario(Player& mario)
 
 m4rkrly::Coin::Coin(
     Interactive& lb
-) : NPC(lb.getX() + 1, lb.getY() + 1, 2, 2, '$', 0.2, -0.7, 150) {}
+) : NPC(lb.getX() + 2, lb.getY() - 2, 2, 2, '$', 0.2, -0.7, 150) {}
 
 Status m4rkrly::Coin::collisionMario(Player& mario)
 {
@@ -64,3 +62,17 @@ Status m4rkrly::Coin::collisionMario(Player& mario)
 }
 
 // END OF COIN CLASS
+
+
+
+// WINTUBE CLASS
+
+m4rkrly::WinTube::WinTube(
+    float x, float y,
+    float width, float height
+) : Interactive(x, y, width, height, '+') {}
+
+Status m4rkrly::WinTube::collisionMario(Player& mario)
+{
+    return WIN;
+}

@@ -33,4 +33,11 @@ namespace m4rkrly {
             Status collisionMario(Player& mario) override;
     };
 
+    class WinTube : public Interactive
+    {
+        public:
+            WinTube(float x, float y, float width, float height);
+            Status collisionMario(Player& mario) override;
+    };
+
 }

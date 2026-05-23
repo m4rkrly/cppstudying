@@ -22,8 +22,8 @@ int main()
             st = lvl.playLevel();
             
             if (st == EXIT or st == LOSE) break;
+            if (st == WIN) { break; }
 
-            // if (st == WIN) nextLevel();
             lvl.putObjectsOnMap(map);
             lvl.putScoreOnMap(map);
             map.returnCur();

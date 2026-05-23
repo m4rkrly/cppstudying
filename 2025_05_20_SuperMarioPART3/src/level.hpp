@@ -35,19 +35,24 @@ namespace m4rkrly
             ~Level();
 
             Status playLevel();
+            
             void createLevel(int level);
             void putObjectsOnMap(Map& map);
             void putScoreOnMap(Map& map);
         
         private:
             void playerDead();
+            void playerWin();
             void moveNPC(NPC* npc);
+            void verticMoveMario();
             void horizMoveMario(float dx);
             bool horizonMoveNPC(NPC& npc);
-            Status marioCollision(); 
+            void marioCollisionNPC(); 
+            void marioCollisionInter(int& i);
             void addToScore(NPC* npc);
 
-            bool verticMoveObj(Moving& obj);
+            
+            bool verticMoveNPC(NPC& npc);
 
             template <typename T>
             void deleteList(T**& l, int& lSize);

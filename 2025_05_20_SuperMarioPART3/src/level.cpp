@@ -77,7 +77,7 @@ Status m4rkrly::Level::playLevel()
         if (GetAsyncKeyState('D') < 0)
             horizMoveMario(1);
 
-        verticMoveObj(mario);
+        verticMoveMario();
 
         if (mario.isFallen())
         {
@@ -96,8 +96,8 @@ Status m4rkrly::Level::playLevel()
             }
         }
 
-        Status marioStatus = marioCollision();
-        return marioStatus;
+        marioCollisionNPC();
+        return NOTHING;
     }
     catch(Status st)
     {
@@ -106,7 +106,7 @@ Status m4rkrly::Level::playLevel()
 }
 
 
-Status m4rkrly::Level::marioCollision()
+void m4rkrly::Level::marioCollisionNPC()
 {
     for (int i = 0; i < npcSize; i++)
     {
@@ -131,45 +131,34 @@ Status m4rkrly::Level::marioCollision()
                 
                 case WIN:
                     deleteFromList(i, npcList, npcSize);
-                    i--;
-                    continue;
-                    return WIN;
+                    playerWin();
+                    throw WIN;
             }
         }
     }
+}
 
+void m4rkrly::Level::marioCollisionInter(int& i)
+{   
+    Status interactionStatus = interactList[i]->collisionMario(mario);
 
-    for (int i = 0; i < interactSize; i++)
+    switch(interactionStatus)
     {
-        if (mario.isCollidingWith(*interactList[i]))
-        {
-            Status interactionStatus = interactList[i]->collisionMario(mario);
-            
-            switch(interactionStatus)
-            {
-                case LOSE:
-                    playerDead();
-                    return LOSE;
+        case LOSE:
+            playerDead();
+            throw LOSE;
 
-                case SPAWN_COIN:
-                    addNewNPC(new Coin(*interactList[i]));
-                    deleteFromList(i, interactList, interactSize);
-                    i--;
-                    continue;
+        case SPAWN_COIN:
+            addNewNPC(new Coin(*interactList[i]));
 
-                case NOTHING:
-                    continue;
-                
-                case WIN:
-                    deleteFromList(i, npcList, npcSize);
-                    i--;
-                    continue;
-                    return WIN;
-            }
-
-        }
+        case NOTHING:
+            return;
+        
+        case WIN:
+            deleteFromList(i, npcList, npcSize);
+            playerWin();
+            throw WIN;
     }
-    return NOTHING;
 }
 
 
@@ -193,6 +182,11 @@ void m4rkrly::Level::playerDead()
 	Sleep(400);
 }
 
+void m4rkrly::Level::playerWin()
+{
+    system("color 2F");
+	Sleep(400);
+}
 
 void m4rkrly::Level::moveNPC(NPC* npc)
 {
@@ -207,7 +201,7 @@ void m4rkrly::Level::moveNPC(NPC* npc)
         && npc->toMoveHoriz(collisionHoriz) == true)
     {
         NPC temp = *npc;
-        bool collisionVertic = verticMoveObj(temp);
+        bool collisionVertic = verticMoveNPC(temp);
         if (collisionVertic == false
             && npc->toMoveVertic(collisionVertic) == false)
         {
@@ -218,7 +212,7 @@ void m4rkrly::Level::moveNPC(NPC* npc)
     // ОСТОРОЖНО ЗДЕСЬ!
     // Если мобы стали неправильно себя вести
     // перенеси эту функцию в if выше
-    verticMoveObj(*npc);
+    verticMoveNPC(*npc);
 }
 
 bool m4rkrly::Level::horizonMoveNPC(NPC& npc)
@@ -253,15 +247,15 @@ bool m4rkrly::Level::horizonMoveNPC(NPC& npc)
     return false;
 }
 
-bool m4rkrly::Level::verticMoveObj(Moving& mov)
+bool m4rkrly::Level::verticMoveNPC(NPC& npc)
 {
-    mov.applyGravity();
+    npc.applyGravity();
     
     bool brickCollision = false;
     bool interactCollision = false;
     for (int i = 0; i < brickSize; i++)
     {
-        if (mov.isCollidingWith(*brickList[i]))
+        if (npc.isCollidingWith(*brickList[i]))
         {
             brickCollision = true;
             break;
@@ -270,7 +264,7 @@ bool m4rkrly::Level::verticMoveObj(Moving& mov)
 
     for (int i = 0; i < interactSize; i++)
     {
-        if (mov.isCollidingWith(*interactList[i]))
+        if (npc.isCollidingWith(*interactList[i]))
         {
             interactCollision = true;
             break;
@@ -279,7 +273,7 @@ bool m4rkrly::Level::verticMoveObj(Moving& mov)
     
     if (brickCollision || interactCollision)
     {
-        mov.discardGravity();
+        npc.discardGravity();
         return true;
     }
     return false;
@@ -287,18 +281,43 @@ bool m4rkrly::Level::verticMoveObj(Moving& mov)
 
 } 
 
+
+void m4rkrly::Level::verticMoveMario()
+{
+    mario.applyGravity();
+    
+    bool brickCollision = false;
+    bool interactCollision = false;
+    for (int i = 0; i < brickSize; i++)
+    {
+        if (mario.isCollidingWith(*brickList[i]))
+        {
+            mario.discardGravity();
+            break;
+        }
+    }
+
+    for (int i = 0; i < interactSize; i++)
+    {
+        if (mario.isCollidingWith(*interactList[i]))
+        {
+            marioCollisionInter(i);
+            mario.discardGravity();
+            break;
+        }
+    }
+} 
+
 void m4rkrly::Level::horizMoveMario(float dx)
 {
     mario.changePos(dx, 0);
 
-    bool collidingWithBrick = false;
-    bool collidingWithInter = false;
     for (int i = 0; i < brickSize; i++) 
     {
         if (mario.isCollidingWith(*brickList[i]))
         {
-            collidingWithBrick = true;
-            break;
+            mario.changePos(-dx, 0);
+            return;
         }
     }  
 
@@ -306,16 +325,12 @@ void m4rkrly::Level::horizMoveMario(float dx)
     {
         if (mario.isCollidingWith(*interactList[i]))
         {
-            collidingWithInter = true;
-            break;
+            mario.changePos(-dx, 0);
+            marioCollisionInter(i);
+            return;
         }
     }
     
-    if (collidingWithBrick or collidingWithInter)
-    {
-        mario.changePos(-dx, 0);
-        return;
-    }
     mario.changePos(-dx, 0);
 
     for (int i = 0; i < brickSize; i++)
@@ -348,6 +363,7 @@ void m4rkrly::Level::createLevel(int level) {
             addNewBrick(new Object(20, 20, 40, 5, '#'));
             addNewInteractive(new LuckyBlock(25, 10));
             addNewNPC(new Goomba(30, 10, 0.2, 0));
+            addNewInteractive(new WinTube(65, 20, 10, 10));
             break;
         case 2:
             break;
