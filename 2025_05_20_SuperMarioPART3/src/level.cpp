@@ -49,10 +49,37 @@ int m4rkrly::Level::playLevel()
     
     for (int i = 0; i < npcSize; i++)
     {
-    
+        moveNPC(npcList[i]);
     }
 
     return 0;
+}
+
+void m4rkrly::Level::moveNPC(NPC* npc)
+{
+    bool collisionHoriz = horizonMoveNPC(*npc);
+    if (collisionHoriz == true
+        && npc->toMoveHoriz(collisionHoriz) == false) 
+    {
+        npc->changeDirection();
+    }
+
+    if (collisionHoriz == false
+        && npc->toMoveHoriz(collisionHoriz) == true)
+    {
+        NPC temp = *npc;
+        bool collisionVertic = verticMoveObj(temp);
+        if (collisionVertic == false
+            && npc->toMoveVertic(collisionVertic) == false)
+        {
+            npc->discardMove();
+            npc->changeDirection();
+        }
+    }
+    // ОСТОРОЖНО ЗДЕСЬ!
+    // Если мобы стали неправильно себя вести
+    // перенеси эту функцию в if выше
+    verticMoveObj(*npc);
 }
 
 bool m4rkrly::Level::horizonMoveNPC(NPC& npc)

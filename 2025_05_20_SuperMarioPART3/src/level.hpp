@@ -46,7 +46,6 @@ namespace m4rkrly
             bool isColliding();
             void increaseScore();
 
-            void horizMoveObj();
             bool verticMoveObj(Moving& obj);
             bool isOutOfBounds();
 

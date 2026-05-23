@@ -128,6 +128,8 @@ m4rkrly::NPC::NPC(
 ) : Moving(x, y, width, height, texture, vSpeed, hSpeed), price(price) {}
 
 
+int m4rkrly::NPC::collisionMario(Player mario) {return 0; }
+
 int m4rkrly::NPC::getPrice() const { return price; }
 
 bool m4rkrly::NPC::toMoveHoriz(bool isCollidingHoriz) { return true; }

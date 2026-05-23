@@ -99,7 +99,7 @@ namespace m4rkrly
             );
             virtual ~NPC() = default;
 
-            virtual int collisionMario(Player mario) = 0;
+            virtual int collisionMario(Player mario);
             virtual bool toMoveHoriz(bool isCollidingHoriz);
             virtual bool toMoveVertic(bool isCollidingVertic);
             
