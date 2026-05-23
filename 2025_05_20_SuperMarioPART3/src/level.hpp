@@ -8,9 +8,9 @@ namespace m4rkrly
     class Level
     {
         private:
-            NPC* npcList;
-            Interactive* interactList;
-            Object* brickList;
+            NPC** npcList;
+            Interactive** interactList;
+            Object** brickList;
             Player mario;
 
             int npcSize;
@@ -50,13 +50,15 @@ namespace m4rkrly
             bool isOutOfBounds();
 
             void addNewNPC(
-                NPC newNpc
+                NPC* newNpc
             );
             void addNewInteractive(
-                Interactive newInter
+                Interactive* newInter
             );
             void addNewBrick(
-                Object newBrick 
+                Object* newBrick 
             );
+            template <typename T>
+            void deleteList(T**& l, int& lSize);
     };
 }

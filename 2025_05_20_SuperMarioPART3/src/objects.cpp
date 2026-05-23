@@ -25,11 +25,6 @@ m4rkrly::Object::Object(
     this->texture = texture;
 }
 
-float m4rkrly::Object::getX() const { return x; }
-float m4rkrly::Object::getY() const { return y; }
-float m4rkrly::Object::getWidth() const { return width; }
-float m4rkrly::Object::getHeight() const { return height; }
-
 void m4rkrly::Object::setPos(float x, float y)
 {
     this->x = x;
@@ -75,6 +70,11 @@ m4rkrly::Moving::Moving(
     this->hSpeed = hSpeed;
 }
 
+bool m4rkrly::Moving::getIsFlying() const
+{
+    return isFlying;
+}
+
 void m4rkrly::Moving::applyGravity(float dVSpeed)
 {
     isFlying = true;
@@ -93,10 +93,6 @@ void m4rkrly::Moving::discardGravity()
 
 
 
-
-
-
-m4rkrly::Interactive::Interactive() : Object() {}
 
 m4rkrly::Interactive::Interactive(
     float x, float y, 
@@ -142,6 +138,11 @@ int m4rkrly::NPC::collisionMario(Player mario)
     return -2;
 } 
 int m4rkrly::NPC::getPrice() const { return price; }
+
+bool m4rkrly::NPC::decide(NPC& temp)
+{
+    return true;
+}
 
 void m4rkrly::NPC::move()
 {   

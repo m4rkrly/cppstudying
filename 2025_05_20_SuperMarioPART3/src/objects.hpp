@@ -12,24 +12,34 @@ namespace m4rkrly
             char texture;
 
         public:
-            Object();
+            Object() = delete;
             Object(
                 float x, float y, 
                 float width, float height, 
                 char texture
             );
-            
-            float getX() const;
-            float getY() const;
-            float getWidth() const;
-            float getHeight() const;
+
+            virtual ~Object() = default;
 
             void setPos(float x, float y);
             void changePos(float dx, float dy);
-
             bool isCollidingWith(Object& other);
-
             void putOnMap(m4rkrly::Map& map);
+    };
+
+
+    class Interactive : public Object
+    {
+        public:
+            Interactive() = delete;
+            Interactive(
+                float x, float y, 
+                float width, float height, 
+                char texture
+            );
+            virtual ~Interactive() = default;
+
+            virtual int collisionMario();
     };
 
     class Moving : public Object {
@@ -46,36 +56,11 @@ namespace m4rkrly
                 char texture, 
                 float vSpeed, float hSpeed
             );
+            virtual ~Moving() = default;
 
+            bool getIsFlying() const;
             void applyGravity(float dVSpeed);
             void discardGravity();
-    };
-
-    class Interactive : public Object
-    {
-        public:
-            Interactive();
-            Interactive(
-                float x, float y, 
-                float width, float height, 
-                char texture
-            );
-
-            virtual int collisionMario();
-    };
-
-    class Player : public Moving 
-    {
-        public:
-            Player();
-            Player(float x, float y);
-
-            Player(const Player&) = delete;
-            Player& operator = (const Player&) = delete;
-            Player(Player&&) = default;
-            Player& operator = (Player&&) = default;
-        
-        void jump(float vSpeed);
     };
 
 
@@ -85,7 +70,7 @@ namespace m4rkrly
             int price;
 
         public:
-            NPC();
+            NPC() = delete;
             NPC(
                 float x, float y, 
                 float width, float height, 
@@ -93,11 +78,13 @@ namespace m4rkrly
                 float hSpeed, float vSpeed,
                 int price
             );
+            virtual ~NPC() = default;
 
+            virtual int collisionMario(Player mario);
+            virtual bool decide(NPC& temp);
             int getPrice() const;
             void move();
             void discardMove();
             void changeDirection();
-            virtual int collisionMario(Player mario);
     };
 }

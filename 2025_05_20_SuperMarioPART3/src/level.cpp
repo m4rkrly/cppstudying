@@ -13,19 +13,25 @@ m4rkrly::Level::Level()
     brickList = nullptr;
 }
 
+template <typename T>
+void m4rkrly::Level::deleteList(T**& l, int& lSize)
+{
+    if (l == nullptr) return;
+    
+    for (int i = 0; i < lSize; i++)
+    {
+        delete l[i];
+    }
+    lSize = 0;
+    delete [] l;
+    l = nullptr;
+}
+
 m4rkrly::Level::~Level() 
 {
-    delete [] npcList;
-    delete [] interactList;
-    delete [] brickList;
-    npcList = nullptr;
-    interactList = nullptr;
-    brickList = nullptr;
-    
-    npcSize = 0;
-    interactSize = 0;
-    brickSize = 0;
-    score = 0;
+    deleteList(npcList, npcSize);
+    deleteList(interactList, interactSize);
+    deleteList(brickList, brickSize);
 }
 
 int m4rkrly::Level::playLevel()
@@ -43,8 +49,17 @@ int m4rkrly::Level::playLevel()
     
     for (int i = 0; i < npcSize; i++)
     {
-        horizonMoveNPC(npcList[i]);
-        verticMoveObj(npcList[i]);
+        NPC* temp = npcList[i];
+        horizonMoveNPC(*temp);
+        verticMoveObj(*temp);
+
+        if (npcList[i]->decide(*temp) == false)
+        {   
+            npcList[i]->changeDirection();
+        }
+        
+        horizonMoveNPC(*npcList[i]);
+        verticMoveObj(*npcList[i]);
     }
 
     return 0;
@@ -58,7 +73,7 @@ void m4rkrly::Level::horizonMoveNPC(NPC& npc)
 
     for (int i = 0; i < brickSize; i++) 
     {
-        if (npc.isCollidingWith(brickList[i])) 
+        if (npc.isCollidingWith(*brickList[i])) 
         {
             brickCollision = true;
             break;
@@ -67,7 +82,7 @@ void m4rkrly::Level::horizonMoveNPC(NPC& npc)
 
     for (int i = 0; i < interactSize; i++)
     {
-        if (npc.isCollidingWith(interactList[i])) 
+        if (npc.isCollidingWith(*interactList[i])) 
         {
             interactCollision = true;
             break;
@@ -87,7 +102,7 @@ void m4rkrly::Level::verticMoveObj(Moving& mov)
     // Возможно стоит убрать повторяющийся код
     for (int i = 0; i < brickSize; i++)
     {
-        if (mov.isCollidingWith(brickList[i]))
+        if (mov.isCollidingWith(*brickList[i]))
         {
             mov.discardGravity();
             break;
@@ -96,7 +111,7 @@ void m4rkrly::Level::verticMoveObj(Moving& mov)
 
     for (int i = 0; i < interactSize; i++)
     {
-        if (mov.isCollidingWith(interactList[i]))
+        if (mov.isCollidingWith(*interactList[i]))
         {
             mov.discardGravity();
             break;
@@ -114,7 +129,7 @@ void m4rkrly::Level::horizMoveMario(float dx)
     bool collidingWithInter = false;
     for (int i = 0; i < brickSize; i++) 
     {
-        if (mario.isCollidingWith(brickList[i]))
+        if (mario.isCollidingWith(*brickList[i]))
         {
             collidingWithBrick = true;
             break;
@@ -123,7 +138,7 @@ void m4rkrly::Level::horizMoveMario(float dx)
 
     for (int i = 0; i < interactSize; i++)
     {
-        if (mario.isCollidingWith(interactList[i]))
+        if (mario.isCollidingWith(*interactList[i]))
         {
             collidingWithInter = true;
             //interactList[i].collisionMario(mario);
@@ -139,11 +154,11 @@ void m4rkrly::Level::horizMoveMario(float dx)
     mario.changePos(-dx, 0);
 
     for (int i = 0; i < brickSize; i++)
-        brickList[i].changePos(-dx, 0);
+        brickList[i]->changePos(-dx, 0);
     for (int i = 0; i < interactSize; i++)
-        interactList[i].changePos(-dx, 0);
+        interactList[i]->changePos(-dx, 0);
     for (int i = 0; i < npcSize; i++)
-        npcList[i].changePos(-dx, 0);
+        npcList[i]->changePos(-dx, 0);
 }
 
 
@@ -165,9 +180,9 @@ void m4rkrly::Level::createLevel(int level) {
 
         // TODO
         case 1:
-            addNewBrick(Object(20, 20, 40, 5, '#'));
-            addNewInteractive(Interactive(25, 15, 3, 3, '!'));
-            addNewNPC(Goomba(25, 10, 0.2, 0));
+            addNewBrick(new Object(20, 20, 40, 5, '#'));
+            addNewInteractive(new Interactive(25, 15, 3, 3, '!'));
+            addNewNPC(new Goomba(25, 10, 0.2, 0));
             break;
         case 2:
             break;
@@ -181,21 +196,22 @@ void m4rkrly::Level::putObjectsOnMap(Map& map)
     mario.putOnMap(map);
 
     for (int i = 0; i < brickSize; i++) 
-        brickList[i].putOnMap(map);   
+        brickList[i]->putOnMap(map);   
 
     for (int i = 0; i < interactSize; i++) 
-        interactList[i].putOnMap(map);
+        interactList[i]->putOnMap(map);
 
     for (int i = 0; i < npcSize; i++) 
-        npcList[i].putOnMap(map);
+        npcList[i]->putOnMap(map);
 }
 
 void m4rkrly::Level::addNewNPC(
-    NPC newNpc
+    NPC* newNpc
 )
 {
+    if (newNpc == nullptr) return;
     npcSize++;
-    NPC* temp = new NPC[npcSize];
+    NPC** temp = new NPC*[npcSize];
 
     if (npcList != nullptr) {
         for (int i = 0; i < npcSize - 1; i++) 
@@ -210,18 +226,19 @@ void m4rkrly::Level::addNewNPC(
 
 
 void m4rkrly::Level::addNewInteractive(
-    Interactive newInter
+    Interactive* newInter
 )
 {
+    if (newInter == nullptr) return;
     interactSize++;
-    Interactive* temp = new Interactive[interactSize];
+    Interactive** temp = new Interactive*[interactSize];
 
     if (interactList != nullptr) {
         for (int i = 0; i < interactSize - 1; i++) 
             temp[i] = interactList[i];
         delete [] interactList;
     }
-    
+
     temp[interactSize - 1] = newInter;
     interactList = temp;
     temp = nullptr;
@@ -229,14 +246,14 @@ void m4rkrly::Level::addNewInteractive(
 
 
 void m4rkrly::Level::addNewBrick(
-    Object newBrick
+    Object* newBrick 
 )
 {
+    if (newBrick == nullptr) return;
     brickSize++;
-    Object* temp = new Object[brickSize];
+    Object** temp = new Object*[brickSize];
 
-    if (brickList != nullptr) 
-    {
+    if (brickList != nullptr) {
         for (int i = 0; i < brickSize - 1; i++) 
             temp[i] = brickList[i];
         delete [] brickList;
