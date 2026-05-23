@@ -33,7 +33,7 @@ namespace m4rkrly
     };
 
     class Moving : public Object {
-        private:
+        protected:
             float vSpeed;
             float hSpeed;
             bool isFlying = false;
@@ -49,9 +49,6 @@ namespace m4rkrly
 
             void applyGravity(float dVSpeed);
             void discardGravity();
-
-            void jump(float vSpeed);
-            
     };
 
     class Interactive : public Object
@@ -77,6 +74,8 @@ namespace m4rkrly
             Player& operator = (const Player&) = delete;
             Player(Player&&) = default;
             Player& operator = (Player&&) = default;
+        
+        void jump(float vSpeed);
     };
 
 
@@ -96,6 +95,9 @@ namespace m4rkrly
             );
 
             int getPrice() const;
+            void move();
+            void discardMove();
+            void changeDirection();
             virtual int collisionMario(Player mario);
     };
 }

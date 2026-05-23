@@ -39,7 +39,8 @@ namespace m4rkrly
             void putScoreOnMap(Map& map);
         
         private:
-            void horizMoveMap(float dx);
+            void horizMoveMario(float dx);
+            void horizonMoveNPC(NPC& npc);
             int marioCollision(); 
             bool isColliding();
             void increaseScore();

@@ -90,11 +90,7 @@ void m4rkrly::Moving::discardGravity()
     vSpeed = 0;
 }
 
-void m4rkrly::Moving::jump(float vSpeed) 
-{
-    if (isFlying != true)
-        this-> vSpeed = vSpeed;    
-}
+
 
 
 
@@ -122,8 +118,11 @@ m4rkrly::Player::Player(float x, float y)
     : Moving(x, y, 3, 3, '@', 0, 0) {}
 //
 
-
-
+void m4rkrly::Player::jump(float vSpeed) 
+{
+    if (isFlying != true)
+        this-> vSpeed = vSpeed;    
+}
 
 
 m4rkrly::NPC::NPC() 
@@ -143,3 +142,18 @@ int m4rkrly::NPC::collisionMario(Player mario)
     return -2;
 } 
 int m4rkrly::NPC::getPrice() const { return price; }
+
+void m4rkrly::NPC::move()
+{   
+    changePos(hSpeed, 0);
+}
+
+void m4rkrly::NPC::discardMove()
+{
+    changePos(-hSpeed, 0);
+}
+
+void m4rkrly::NPC::changeDirection()
+{
+    hSpeed = -hSpeed;
+}

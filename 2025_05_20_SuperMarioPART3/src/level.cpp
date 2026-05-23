@@ -34,23 +34,59 @@ int m4rkrly::Level::playLevel()
         mario.jump(-1);
 
     if (GetAsyncKeyState('A') < 0)
-        horizMoveMap(-1);
+        horizMoveMario(-1);
 
     if (GetAsyncKeyState('D') < 0)
-        horizMoveMap(1);
+        horizMoveMario(1);
 
     verticMoveObj(mario);
     
+    for (int i = 0; i < npcSize; i++)
+    {
+        horizonMoveNPC(npcList[i]);
+        verticMoveObj(npcList[i]);
+    }
+
     return 0;
+}
+
+void m4rkrly::Level::horizonMoveNPC(NPC& npc)
+{
+    npc.move();
+    bool brickCollision = false;
+    bool interactCollision = false;
+
+    for (int i = 0; i < brickSize; i++) 
+    {
+        if (npc.isCollidingWith(brickList[i])) 
+        {
+            brickCollision = true;
+            break;
+        }
+    }
+
+    for (int i = 0; i < interactSize; i++)
+    {
+        if (npc.isCollidingWith(interactList[i])) 
+        {
+            interactCollision = true;
+            break;
+        }
+    }
+
+    if (brickCollision || interactCollision)
+    {
+        npc.discardMove();
+    }
 }
 
 void m4rkrly::Level::verticMoveObj(Moving& mov)
 {
     mov.applyGravity(0.05);
     
+    // Возможно стоит убрать повторяющийся код
     for (int i = 0; i < brickSize; i++)
     {
-    // Возможно стоит убрать повторяющийся код
         if (mov.isCollidingWith(brickList[i]))
         {
             mov.discardGravity();
@@ -70,7 +106,7 @@ void m4rkrly::Level::verticMoveObj(Moving& mov)
 
 } 
 
-void m4rkrly::Level::horizMoveMap(float dx)
+void m4rkrly::Level::horizMoveMario(float dx)
 {
     mario.changePos(dx, 0);
 
