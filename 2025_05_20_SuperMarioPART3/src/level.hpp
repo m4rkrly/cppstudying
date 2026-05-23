@@ -1,5 +1,6 @@
 #pragma once
 
+#include "init.hpp"
 #include "map.hpp"
 #include "objects.hpp"
 
@@ -33,18 +34,19 @@ namespace m4rkrly
 
             ~Level();
 
-            int playLevel();
+            Status playLevel();
             void createLevel(int level);
             void putObjectsOnMap(Map& map);
             void putScoreOnMap(Map& map);
         
         private:
+            void playerDead();
             void moveNPC(NPC* npc);
             void horizMoveMario(float dx);
             bool horizonMoveNPC(NPC& npc);
-            int marioCollision(); 
+            Status marioCollision(); 
             bool isColliding();
-            void increaseScore();
+            void addToScore(NPC* npc);
 
             bool verticMoveObj(Moving& obj);
             bool isOutOfBounds();

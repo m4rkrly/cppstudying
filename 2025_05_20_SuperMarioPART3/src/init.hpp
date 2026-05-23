@@ -3,6 +3,13 @@
 const int MAPHEIGHT = 25;
 const int MAPWIDTH = 80;
 
+enum Status {
+    LOSE = -1,
+    NOTHING = 0,
+    KILL = 1,
+    WIN = 2,
+    EXIT = 3
+};
 // namespace {
 // }
 

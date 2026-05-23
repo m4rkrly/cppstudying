@@ -1,6 +1,7 @@
 #include <iostream>
 #include <windows.h>
 
+#include "init.hpp"
 #include "map.hpp"
 #include "level.hpp"
 #include "objects.hpp"
@@ -60,8 +61,11 @@ m4rkrly::Level::~Level()
     deleteList(brickList, brickSize);
 }
 
-int m4rkrly::Level::playLevel()
+Status m4rkrly::Level::playLevel()
 {
+    //if (GetAsyncKeyState(VK_ESCAPE) < 0) 
+    //    return EXIT;
+
     if (GetAsyncKeyState(VK_SPACE) < 0)
         mario.jump(-1);
 
@@ -72,18 +76,71 @@ int m4rkrly::Level::playLevel()
         horizMoveMario(1);
 
     verticMoveObj(mario);
+
+    if (mario.isFallen())
+    {
+        playerDead();
+        return LOSE;
+    }
     
     for (int i = 0; i < npcSize; i++)
     {
         moveNPC(npcList[i]);
-        
         if (npcList[i]->isFallen() == true)
+        // Здесь почему-то падает в бесконечный цикл
             deleteFromList(i, npcList, npcSize);
+            //i--;
+            //continue;
     }
 
-    return 0;
+    Status marioStatus = marioCollision();
+    return marioStatus;
 }
 
+
+Status m4rkrly::Level::marioCollision()
+{
+    for (int i = 0; i < npcSize; i++)
+    {
+        if (mario.isCollidingWith(*npcList[i]))
+        {
+            Status interactionStatus = npcList[i]->collisionMario(mario);
+            
+            switch(interactionStatus)
+            {
+                case LOSE:
+                    playerDead();
+                    return LOSE;
+
+                case KILL:
+                    deleteFromList(i, npcList, npcSize);
+                    i--;
+                    continue;
+
+                case NOTHING:
+                    continue;
+                
+                case WIN:
+                    deleteFromList(i, npcList, npcSize);
+                    i--;
+                    continue;
+                    return WIN;
+            }
+        }
+    }
+    return NOTHING;
+}
+
+void m4rkrly::Level::addToScore(NPC* npc)
+{
+    score += npc->getPrice();
+}
+
+void m4rkrly::Level::playerDead()
+{
+    system("color 4F");
+	Sleep(500);
+}
 
 
 void m4rkrly::Level::moveNPC(NPC* npc)
@@ -199,7 +256,6 @@ void m4rkrly::Level::horizMoveMario(float dx)
         if (mario.isCollidingWith(*interactList[i]))
         {
             collidingWithInter = true;
-            //interactList[i].collisionMario(mario);
             break;
         }
     }
@@ -240,7 +296,7 @@ void m4rkrly::Level::createLevel(int level) {
         case 1:
             addNewBrick(new Object(20, 20, 40, 5, '#'));
             addNewInteractive(new LuckyBlock(25, 15));
-            addNewNPC(new Goomba(15, 10, 0.2, 0));
+            addNewNPC(new Goomba(28, 10, 0.2, 0));
             break;
         case 2:
             break;

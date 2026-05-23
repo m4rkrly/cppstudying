@@ -19,9 +19,13 @@ bool m4rkrly::Goomba::toMoveVertic(bool isCollidingVertic)
     return true;
 }
 
-int m4rkrly::Goomba::collisionMario(Player mario) {
-    // TODO
-    return 0;
+Status m4rkrly::Goomba::collisionMario(Player& mario) 
+{
+    if (mario.getIsFlying() && mario.getVSpeed() >0)
+    {
+        return KILL;
+    }
+    return LOSE;
 }
 // END OF GOOMBA CLASS
 

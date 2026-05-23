@@ -72,6 +72,11 @@ m4rkrly::Moving::Moving(
     this->hSpeed = hSpeed;
 }
 
+float m4rkrly::Moving::getVSpeed() const
+{
+    return vSpeed;
+}
+
 bool m4rkrly::Moving::getIsFlying() const
 {
     return isFlying;
@@ -134,7 +139,7 @@ m4rkrly::NPC::NPC(
 ) : Moving(x, y, width, height, texture, vSpeed, hSpeed), price(price) {}
 
 
-int m4rkrly::NPC::collisionMario(Player mario) {return 0; }
+Status m4rkrly::NPC::collisionMario(Player& mario) { return NOTHING; }
 
 int m4rkrly::NPC::getPrice() const { return price; }
 

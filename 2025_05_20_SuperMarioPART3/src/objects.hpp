@@ -45,6 +45,7 @@ namespace m4rkrly
             );
             virtual ~Moving() = default;
 
+            float getVSpeed() const;
             bool getIsFlying() const;
             void applyGravity();
             void discardGravity();
@@ -100,7 +101,7 @@ namespace m4rkrly
             );
             virtual ~NPC() = default;
 
-            virtual int collisionMario(Player mario);
+            virtual Status collisionMario(Player& mario);
             virtual bool toMoveHoriz(bool isCollidingHoriz);
             virtual bool toMoveVertic(bool isCollidingVertic);
             

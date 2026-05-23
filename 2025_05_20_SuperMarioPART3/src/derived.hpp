@@ -14,7 +14,7 @@ namespace m4rkrly {
             );
             bool toMoveHoriz(bool isCollidingHoriz) override;
             bool toMoveVertic(bool isCollidingVertic) override;
-            int collisionMario(Player mario) override;      
+            Status collisionMario(Player& mario) override;      
     };
 
 
