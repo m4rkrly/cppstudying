@@ -36,9 +36,31 @@ Status m4rkrly::Goomba::collisionMario(Player& mario)
 m4rkrly::LuckyBlock::LuckyBlock(float x, float y) 
     : Interactive(x, y, 4, 3, '?') {}
 
-int m4rkrly::LuckyBlock::collisionMario(Player mario)
+Status m4rkrly::LuckyBlock::collisionMario(Player& mario)
 {
-    // TODO
-    return 0;
+    // bool collIsFromBottom = (mario.getY() > y + height);
+    // if (mario.getIsFlying() 
+    // && mario.getVSpeed() < 0 
+    // && collIsFromBottom)
+    // {
+    //     return SPAWN_COIN;
+    // }
+    //return NOTHING;
+    return SPAWN_COIN;
 }
 // END OF LUCKYBLOCK CLASS
+
+
+
+// COIN CLASS
+
+m4rkrly::Coin::Coin(
+    Interactive& lb
+) : NPC(lb.getX() + 1, lb.getY() + 1, 2, 2, '$', 0.2, -0.7, 150) {}
+
+Status m4rkrly::Coin::collisionMario(Player& mario)
+{
+    return KILL;
+}
+
+// END OF COIN CLASS

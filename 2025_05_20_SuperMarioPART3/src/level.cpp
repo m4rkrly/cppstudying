@@ -99,7 +99,7 @@ Status m4rkrly::Level::playLevel()
 }
 
 
-Status m4rkrly::Level::marioCollision()
+Status m4rkrly::Level::marioNPCCollision()
 {
     for (int i = 0; i < npcSize; i++)
     {
@@ -130,8 +130,41 @@ Status m4rkrly::Level::marioCollision()
             }
         }
     }
+
+
+    for (int i = 0; i < interactSize; i++)
+    {
+        if (mario.isCollidingWith(*interactList[i]))
+        {
+            Status interactionStatus = interactList[i]->collisionMario(mario);
+            
+            switch(interactionStatus)
+            {
+                case LOSE:
+                    playerDead();
+                    return LOSE;
+
+                case SPAWN_COIN:
+                    addNewNPC(new Coin(*interactList[i]));
+                    deleteFromList(i, interactList, interactSize);
+                    i--;
+                    continue;
+
+                case NOTHING:
+                    continue;
+                
+                case WIN:
+                    deleteFromList(i, npcList, npcSize);
+                    i--;
+                    continue;
+                    return WIN;
+            }
+
+        }
+    }
     return NOTHING;
 }
+
 
 void m4rkrly::Level::putScoreOnMap(Map& map)
 {
@@ -306,8 +339,8 @@ void m4rkrly::Level::createLevel(int level) {
         // TODO
         case 1:
             addNewBrick(new Object(20, 20, 40, 5, '#'));
-            addNewInteractive(new LuckyBlock(25, 15));
-            addNewNPC(new Goomba(28, 10, 0.2, 0));
+            addNewInteractive(new LuckyBlock(25, 10));
+            addNewNPC(new Goomba(30, 10, 0.2, 0));
             break;
         case 2:
             break;

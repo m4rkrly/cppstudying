@@ -22,7 +22,15 @@ namespace m4rkrly {
     {
         public:
             LuckyBlock(float x, float y);
-            int collisionMario(Player mario) override;
+            Status collisionMario(Player& mario) override;
+    };
+
+
+    class Coin : public NPC
+    {
+        public:
+            Coin(Interactive& lb);
+            Status collisionMario(Player& mario) override;
     };
 
 }

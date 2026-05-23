@@ -7,8 +7,9 @@ enum Status {
     LOSE = -1,
     NOTHING = 0,
     KILL = 1,
-    WIN = 2,
-    EXIT = 3
+    SPAWN_COIN = 2,
+    WIN = 3,
+    EXIT = 4
 };
 // namespace {
 // }

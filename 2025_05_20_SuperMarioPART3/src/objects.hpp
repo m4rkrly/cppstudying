@@ -85,7 +85,7 @@ namespace m4rkrly
             );
             virtual ~Interactive() = default;
 
-            virtual int collisionMario(Player mario) = 0;
+            virtual Status collisionMario(Player& mario) = 0;
     };
 
 
