@@ -13,22 +13,23 @@ int main()
     m4rkrly::Level lvl;
     Status st = NOTHING;
 
-    while (st != EXIT) {
+    while (st != EXIT) 
+    {
         lvl.createLevel(level);
-        do 
+        while (true)
         {
             map.clearMap();
             st = lvl.playLevel();
             
-            if (st == EXIT) break;
-            
-            // if (st == WIN) nextLevel();
+            if (st == EXIT or st == LOSE) break;
 
+            // if (st == WIN) nextLevel();
             lvl.putObjectsOnMap(map);
+            lvl.putScoreOnMap(map);
             map.returnCur();
             map.showMap();
             Sleep(10);
-        } while (st != LOSE or st != WIN or st != EXIT);
+        } 
     }
 
     return 0;

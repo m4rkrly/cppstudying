@@ -21,7 +21,8 @@ bool m4rkrly::Goomba::toMoveVertic(bool isCollidingVertic)
 
 Status m4rkrly::Goomba::collisionMario(Player& mario) 
 {
-    if (mario.getIsFlying() && mario.getVSpeed() >0)
+    bool collIsVert = (mario.getY() + mario.getHeight() < y + height * 0.5);
+    if (mario.getIsFlying() && mario.getVSpeed() > 0 && collIsVert)
     {
         return KILL;
     }

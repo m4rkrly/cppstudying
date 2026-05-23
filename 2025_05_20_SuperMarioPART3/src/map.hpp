@@ -20,7 +20,6 @@ namespace m4rkrly
             void clearMap();
             bool isPosOnMap(int x, int y);
             void putSymbol(int x, int y, char texture);
-            void putScoreOnMap(int& score);
             void returnCur();
             void showMap();
     };

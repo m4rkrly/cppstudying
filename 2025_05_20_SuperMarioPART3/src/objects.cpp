@@ -20,6 +20,13 @@ m4rkrly::Object::Object(
     this->texture = texture;
 }
 
+float m4rkrly::Object::getX() const {return x; }
+float m4rkrly::Object::getY() const {return y; }
+float m4rkrly::Object::getWidth() const {return width; }
+float m4rkrly::Object::getHeight() const {return height; }
+
+
+
 void m4rkrly::Object::setPos(float x, float y)
 {
     this->x = x;

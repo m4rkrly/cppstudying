@@ -114,6 +114,7 @@ Status m4rkrly::Level::marioCollision()
                     return LOSE;
 
                 case KILL:
+                    addToScore(npcList[i]);
                     deleteFromList(i, npcList, npcSize);
                     i--;
                     continue;
@@ -132,6 +133,15 @@ Status m4rkrly::Level::marioCollision()
     return NOTHING;
 }
 
+void m4rkrly::Level::putScoreOnMap(Map& map)
+{
+    char c[30];
+	sprintf(c, "Score: %d", score);
+	int len = strlen(c);
+	for (int i = 0; i < len; i++) 
+        map.putSymbol(i+5, 1, c[i]);
+}
+
 void m4rkrly::Level::addToScore(NPC* npc)
 {
     score += npc->getPrice();
@@ -140,7 +150,7 @@ void m4rkrly::Level::addToScore(NPC* npc)
 void m4rkrly::Level::playerDead()
 {
     system("color 4F");
-	Sleep(500);
+	Sleep(400);
 }
 
 

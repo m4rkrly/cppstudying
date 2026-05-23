@@ -31,17 +31,6 @@ void m4rkrly::Map::putSymbol(int x, int y, char texture)
 }
 
 
-void m4rkrly::Map::putScoreOnMap(int& score) 
-{
-    char c[30];
-	sprintf(c, "Score: %d", score);
-	int len = strlen(c);
-	for (int i = 0; i < len; i++) {
-		map[1][i+5] = c[i];
-	}
-}
-
-
 void m4rkrly::Map::returnCur() 
 {
     COORD coord;

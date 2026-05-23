@@ -6,7 +6,7 @@ namespace m4rkrly
 {
     class Object
     {
-        private:
+        protected:
             float x, y;
             float width, height;
             char texture;
@@ -20,6 +20,11 @@ namespace m4rkrly
             );
 
             virtual ~Object() = default;
+
+            float getX() const;
+            float getY() const;
+            float getWidth() const;
+            float getHeight() const;
 
             void setPos(float x, float y);
             void changePos(float dx, float dy);
