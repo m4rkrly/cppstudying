@@ -63,43 +63,50 @@ m4rkrly::Level::~Level()
 
 Status m4rkrly::Level::playLevel()
 {
-    if (GetAsyncKeyState(VK_ESCAPE) < 0) 
-        return EXIT;
-
-    if (GetAsyncKeyState(VK_SPACE) < 0)
-        mario.jump(-1);
-
-    if (GetAsyncKeyState('A') < 0)
-        horizMoveMario(-1);
-
-    if (GetAsyncKeyState('D') < 0)
-        horizMoveMario(1);
-
-    verticMoveObj(mario);
-
-    if (mario.isFallen())
+    try 
     {
-        playerDead();
-        return LOSE;
-    }
-    
-    for (int i = 0; i < npcSize; i++)
-    {
-        moveNPC(npcList[i]);
-        if (npcList[i]->isFallen() == true) 
+        if (GetAsyncKeyState(VK_ESCAPE) < 0) 
+            throw EXIT;
+
+        if (GetAsyncKeyState(VK_SPACE) < 0)
+            mario.jump(-1);
+
+        if (GetAsyncKeyState('A') < 0)
+            horizMoveMario(-1);
+
+        if (GetAsyncKeyState('D') < 0)
+            horizMoveMario(1);
+
+        verticMoveObj(mario);
+
+        if (mario.isFallen())
         {
-            deleteFromList(i, npcList, npcSize);
-            i--;
-            continue;
+            playerDead();
+            return LOSE;
         }
-    }
+        
+        for (int i = 0; i < npcSize; i++)
+        {
+            moveNPC(npcList[i]);
+            if (npcList[i]->isFallen() == true) 
+            {
+                deleteFromList(i, npcList, npcSize);
+                i--;
+                continue;
+            }
+        }
 
-    Status marioStatus = marioCollision();
-    return marioStatus;
+        Status marioStatus = marioCollision();
+        return marioStatus;
+    }
+    catch(Status st)
+    {
+        return st;
+    }
 }
 
 
-Status m4rkrly::Level::marioNPCCollision()
+Status m4rkrly::Level::marioCollision()
 {
     for (int i = 0; i < npcSize; i++)
     {
@@ -111,7 +118,7 @@ Status m4rkrly::Level::marioNPCCollision()
             {
                 case LOSE:
                     playerDead();
-                    return LOSE;
+                    throw LOSE;
 
                 case KILL:
                     addToScore(npcList[i]);

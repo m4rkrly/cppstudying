@@ -17,7 +17,7 @@ int main()
     {
         lvl.createLevel(level);
         while (true)
-        {
+        { 
             map.clearMap();
             st = lvl.playLevel();
             
@@ -29,6 +29,7 @@ int main()
             map.returnCur();
             map.showMap();
             Sleep(10);
+
         } 
     }
 

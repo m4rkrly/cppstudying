@@ -45,11 +45,9 @@ namespace m4rkrly
             void horizMoveMario(float dx);
             bool horizonMoveNPC(NPC& npc);
             Status marioCollision(); 
-            bool isColliding();
             void addToScore(NPC* npc);
 
             bool verticMoveObj(Moving& obj);
-            bool isOutOfBounds();
 
             template <typename T>
             void deleteList(T**& l, int& lSize);
