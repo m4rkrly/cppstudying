@@ -1,5 +1,6 @@
 #include <cmath>
 
+#include "init.hpp"
 #include "objects.hpp"
 #include "map.hpp"
 
@@ -36,6 +37,11 @@ bool m4rkrly::Object::isCollidingWith(Object& other)
     bool collisionX = ((x + width > other.x) && (x < (other.x + other.width)));
     bool collisionY = ((y + height) > other.y) && (y < (other.y + other.height));
     return collisionX && collisionY;
+}
+
+bool m4rkrly::Object::isFallen()
+{
+    return y > MAPHEIGHT;
 }
 
 void m4rkrly::Object::putOnMap(m4rkrly::Map& map)

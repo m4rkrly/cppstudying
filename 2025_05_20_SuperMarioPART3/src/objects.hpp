@@ -24,6 +24,7 @@ namespace m4rkrly
             void setPos(float x, float y);
             void changePos(float dx, float dy);
             bool isCollidingWith(Object& other);
+            bool isFallen();
             void putOnMap(m4rkrly::Map& map);
     };
 

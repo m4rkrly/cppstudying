@@ -27,6 +27,32 @@ void m4rkrly::Level::deleteList(T**& l, int& lSize)
     l = nullptr;
 }
 
+template <typename T>
+void m4rkrly::Level::deleteFromList(int i, T**& l, int& lSize)
+{
+    if (lSize == 1)
+    {
+        delete [] l; 
+        l = nullptr;
+        lSize = 0;
+        return;
+    }
+    
+    delete l[i];
+    l[i] = l[lSize - 1];
+
+    lSize--;
+    T** temp = new T*[lSize];
+    for (int j = 0; j < lSize; j++)
+    {
+        temp[j] = l[j];
+    }
+
+    delete [] l;
+    l = temp;
+    temp = nullptr;
+}
+
 m4rkrly::Level::~Level() 
 {
     deleteList(npcList, npcSize);
@@ -50,10 +76,15 @@ int m4rkrly::Level::playLevel()
     for (int i = 0; i < npcSize; i++)
     {
         moveNPC(npcList[i]);
+        
+        if (npcList[i]->isFallen() == true)
+            deleteFromList(i, npcList, npcSize);
     }
 
     return 0;
 }
+
+
 
 void m4rkrly::Level::moveNPC(NPC* npc)
 {
@@ -209,7 +240,7 @@ void m4rkrly::Level::createLevel(int level) {
         case 1:
             addNewBrick(new Object(20, 20, 40, 5, '#'));
             addNewInteractive(new LuckyBlock(25, 15));
-            addNewNPC(new Goomba(25, 10, 0.2, 0));
+            addNewNPC(new Goomba(15, 10, 0.2, 0));
             break;
         case 2:
             break;

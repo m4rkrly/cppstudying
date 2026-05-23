@@ -51,6 +51,8 @@ namespace m4rkrly
 
             template <typename T>
             void deleteList(T**& l, int& lSize);
+            template <typename T>
+            void deleteFromList(int i, T**& l, int& lSize);
 
             void addNewNPC(
                 NPC* newNpc
