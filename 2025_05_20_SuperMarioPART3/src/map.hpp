@@ -7,8 +7,7 @@ namespace m4rkrly
     class Map
     {
         private:
-            char map[MAPHEIGHT][MAPWIDTH + 1]; // Поменяй на map[height][width]
-
+            char map[init::MAPHEIGHT][init::MAPWIDTH + 1];
         public:
             Map() = default;
 

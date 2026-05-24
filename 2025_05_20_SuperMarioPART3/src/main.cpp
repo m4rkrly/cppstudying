@@ -1,7 +1,7 @@
 #include <windows.h>
-#include <iostream>
 
 #include "derived.hpp"
+#include "game.hpp"
 #include "init.hpp"
 #include "level.hpp"
 #include "map.hpp"
@@ -9,32 +9,7 @@
 
 int main()
 {   
-    int level = 1; 
-    m4rkrly::Map map;
-    m4rkrly::Level lvl;
-    Status st = NOTHING;
-
-    while (st != EXIT) 
-    {
-        lvl.createLevel(level);
-        while (true)
-        { 
-            map.clearMap();
-            st = lvl.playLevel();
-
-            std::cout << st << std::endl;
-            
-            if (st == EXIT or st == LOSE) break;
-            if (st == WIN) { break; }
-
-            lvl.putObjectsOnMap(map);
-            lvl.putScoreOnMap(map);
-            map.returnCur();
-            map.showMap();
-            Sleep(10);
-
-        } 
-    }
-
+    m4rkrly::Game game;
+    game.playGame();
     return 0;
 }

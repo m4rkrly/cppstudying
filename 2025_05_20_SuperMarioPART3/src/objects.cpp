@@ -48,7 +48,7 @@ bool m4rkrly::Object::isCollidingWith(Object& other)
 
 bool m4rkrly::Object::isFallen()
 {
-    return y > MAPHEIGHT;
+    return y > init::MAPHEIGHT;
 }
 
 void m4rkrly::Object::putOnMap(m4rkrly::Map& map)
