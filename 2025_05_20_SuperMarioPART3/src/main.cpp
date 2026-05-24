@@ -1,4 +1,5 @@
 #include <windows.h>
+#include <iostream>
 
 #include "derived.hpp"
 #include "init.hpp"
@@ -20,6 +21,8 @@ int main()
         { 
             map.clearMap();
             st = lvl.playLevel();
+
+            std::cout << st << std::endl;
             
             if (st == EXIT or st == LOSE) break;
             if (st == WIN) { break; }

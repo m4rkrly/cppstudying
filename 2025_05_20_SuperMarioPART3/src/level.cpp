@@ -31,6 +31,8 @@ void m4rkrly::Level::deleteList(T**& l, int& lSize)
 template <typename T>
 void m4rkrly::Level::deleteFromList(int i, T**& l, int& lSize)
 {
+    delete l[i];
+
     if (lSize == 1)
     {
         delete [] l; 
@@ -39,7 +41,6 @@ void m4rkrly::Level::deleteFromList(int i, T**& l, int& lSize)
         return;
     }
     
-    delete l[i];
     l[i] = l[lSize - 1];
 
     lSize--;
@@ -128,11 +129,6 @@ void m4rkrly::Level::marioCollisionNPC()
 
                 case NOTHING:
                     continue;
-                
-                case WIN:
-                    deleteFromList(i, npcList, npcSize);
-                    playerWin();
-                    throw WIN;
             }
         }
     }
@@ -144,10 +140,6 @@ void m4rkrly::Level::marioCollisionInter(int& i)
 
     switch(interactionStatus)
     {
-        case LOSE:
-            playerDead();
-            throw LOSE;
-
         case SPAWN_COIN:
             addNewNPC(new Coin(*interactList[i]));
 
@@ -155,7 +147,6 @@ void m4rkrly::Level::marioCollisionInter(int& i)
             return;
         
         case WIN:
-            deleteFromList(i, npcList, npcSize);
             playerWin();
             throw WIN;
     }
