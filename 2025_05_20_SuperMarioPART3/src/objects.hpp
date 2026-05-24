@@ -18,20 +18,19 @@ namespace m4rkrly
                 float width, float height, 
                 char texture
             );
-
             virtual ~Object() = default;
-
+            
+            void changePos(float dx, float dy);
             float getX() const;
             float getY() const;
             float getWidth() const;
             float getHeight() const;
-
-            void setPos(float x, float y);
-            void changePos(float dx, float dy);
             bool isCollidingWith(Object& other);
             bool isFallen();
             void putOnMap(m4rkrly::Map& map);
+            void setPos(float x, float y);   
     };
+
 
 
     class Moving : public Object {
@@ -50,10 +49,10 @@ namespace m4rkrly
             );
             virtual ~Moving() = default;
 
-            float getVSpeed() const;
-            bool getIsFlying() const;
             void applyGravity();
             void discardGravity();
+            float getVSpeed() const;
+            bool getIsFlying() const;  
     };
 
 
@@ -107,14 +106,11 @@ namespace m4rkrly
             virtual ~NPC() = default;
 
             virtual Status collisionMario(Player& mario);
-            virtual bool toMoveHoriz(bool isCollidingHoriz);
-            virtual bool toMoveVertic(bool isCollidingVertic);
-            
+            void changeDirection();
+            void discardMove();
             int getPrice() const;
             void move();
-            void discardMove();
-            void changeDirection();
+            virtual bool toMoveHoriz(bool isCollidingHoriz);
+            virtual bool toMoveVertic(bool isCollidingVertic);
     };
-
-    
 }

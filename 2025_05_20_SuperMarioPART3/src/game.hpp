@@ -1,6 +1,7 @@
 #pragma once
 
 #include "level.hpp"
+#include "map.hpp"
 
 namespace m4rkrly
 {

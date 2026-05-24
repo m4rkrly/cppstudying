@@ -31,6 +31,8 @@ void m4rkrly::Game::playGame()
     }
 }
 
+
+
 void m4rkrly::Game::nextLevel()
 {
     if (init::MAXLEVEL == levelNumber)
@@ -39,5 +41,4 @@ void m4rkrly::Game::nextLevel()
         return;
     }
     levelNumber++;
-    
 }

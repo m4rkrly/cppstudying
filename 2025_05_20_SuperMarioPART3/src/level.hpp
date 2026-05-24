@@ -19,8 +19,6 @@ namespace m4rkrly
             int brickSize;
             int score;
 
-            const int MAXLVL = 3;
-            int lvl = 1;
         public:
             Level(); 
 
@@ -41,33 +39,35 @@ namespace m4rkrly
             void putScoreOnMap(Map& map);
         
         private:
-            void playerDead();
-            void playerWin();
-            void moveNPC(NPC* npc);
-            void verticMoveMario();
-            void horizMoveMario(float dx);
-            bool horizonMoveNPC(NPC& npc);
-            void marioCollisionNPC(); 
-            void marioCollisionInter(int& i);
-            void addToScore(NPC* npc);
-
             
-            bool verticMoveNPC(NPC& npc);
+            void addNewBrick(
+                Object* newBrick 
+            );
 
-            template <typename T>
-            void deleteList(T**& l, int& lSize);
-            template <typename T>
-            void deleteFromList(int i, T**& l, int& lSize);
+            void addNewInteractive(
+                Interactive* newInter
+            );
 
             void addNewNPC(
                 NPC* newNpc
             );
-            void addNewInteractive(
-                Interactive* newInter
-            );
-            void addNewBrick(
-                Object* newBrick 
-            );
             
+            void addToScore(NPC* npc);
+
+            template <typename T>
+            void deleteList(T**& l, int& lSize);
+
+            template <typename T>
+            void deleteFromList(int i, T**& l, int& lSize);
+
+            void horizMoveMario(float dx);
+            bool horizMoveNPC(NPC& npc);
+            void marioCollisionInter(int& i);
+            void marioCollisionNPC(); 
+            void moveNPC(NPC* npc);
+            void playerDead();
+            void playerWin();
+            void verticMoveMario();
+            bool verticMoveNPC(NPC& npc);
     };
 }

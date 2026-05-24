@@ -1,10 +1,8 @@
 #include <cmath>
 
 #include "init.hpp"
-#include "objects.hpp"
 #include "map.hpp"
-
-
+#include "objects.hpp"
 
 // OBJECT CLASS
 m4rkrly::Object::Object(
@@ -20,24 +18,18 @@ m4rkrly::Object::Object(
     this->texture = texture;
 }
 
-float m4rkrly::Object::getX() const {return x; }
-float m4rkrly::Object::getY() const {return y; }
-float m4rkrly::Object::getWidth() const {return width; }
-float m4rkrly::Object::getHeight() const {return height; }
-
-
-
-void m4rkrly::Object::setPos(float x, float y)
-{
-    this->x = x;
-    this->y = y;
-}
-
 void m4rkrly::Object::changePos(float dx, float dy)
 {
     x += dx;
     y += dy;
 }
+
+
+float m4rkrly::Object::getX() const {return x; }
+float m4rkrly::Object::getY() const {return y; }
+float m4rkrly::Object::getWidth() const {return width; }
+float m4rkrly::Object::getHeight() const {return height; }
+
 
 bool m4rkrly::Object::isCollidingWith(Object& other)
 {
@@ -46,10 +38,9 @@ bool m4rkrly::Object::isCollidingWith(Object& other)
     return collisionX && collisionY;
 }
 
-bool m4rkrly::Object::isFallen()
-{
-    return y > init::MAPHEIGHT;
-}
+
+bool m4rkrly::Object::isFallen() { return y > init::MAPHEIGHT; }
+
 
 void m4rkrly::Object::putOnMap(m4rkrly::Map& map)
 {
@@ -63,6 +54,8 @@ void m4rkrly::Object::putOnMap(m4rkrly::Map& map)
 			if (map.isPosOnMap(i, j))
 				map.putSymbol(i, j, this->texture);
 }
+
+void m4rkrly::Object::setPos(float x, float y) { this->x = x; this->y = y; }
 // END OF OBJECT CLASS
 
 
@@ -79,16 +72,6 @@ m4rkrly::Moving::Moving(
     this->hSpeed = hSpeed;
 }
 
-float m4rkrly::Moving::getVSpeed() const
-{
-    return vSpeed;
-}
-
-bool m4rkrly::Moving::getIsFlying() const
-{
-    return isFlying;
-}
-
 void m4rkrly::Moving::applyGravity()
 {
     isFlying = true;
@@ -103,6 +86,9 @@ void m4rkrly::Moving::discardGravity()
     changePos(0, -vSpeed);
     vSpeed = 0;
 }
+
+float m4rkrly::Moving::getVSpeed() const { return vSpeed; }
+bool m4rkrly::Moving::getIsFlying() const { return isFlying; }
 // END OF MOVING CLASS
 
 
@@ -135,7 +121,6 @@ m4rkrly::Interactive::Interactive(
 
 
 
-
 // NPC CLASS
 m4rkrly::NPC::NPC(
     float x, float y, 
@@ -143,21 +128,14 @@ m4rkrly::NPC::NPC(
     char texture, 
     float hSpeed, float vSpeed,
     int price
-) : Moving(x, y, width, height, texture, vSpeed, hSpeed), price(price) {}
+) : Moving(x, y, width, height, texture, vSpeed, hSpeed), price(price) {}     
 
 
 Status m4rkrly::NPC::collisionMario(Player& mario) { return NOTHING; }
-
+void m4rkrly::NPC::changeDirection() { hSpeed = -hSpeed; }
+void m4rkrly::NPC::discardMove() { changePos(-hSpeed, 0); }
 int m4rkrly::NPC::getPrice() const { return price; }
-
+void m4rkrly::NPC::move() { changePos(hSpeed, 0); }
 bool m4rkrly::NPC::toMoveHoriz(bool isCollidingHoriz) { return true; }
 bool m4rkrly::NPC::toMoveVertic(bool isCollidingVertic) { return true; }
-
-void m4rkrly::NPC::move() { changePos(hSpeed, 0); }
-
-void m4rkrly::NPC::discardMove() { changePos(-hSpeed, 0); }
-
-void m4rkrly::NPC::changeDirection() { hSpeed = -hSpeed; }
 // END OF NPC CLASS
-
-
