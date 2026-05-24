@@ -142,6 +142,12 @@ void m4rkrly::Level::marioCollisionInter(int& i)
     {
         case SPAWN_COIN:
             addNewNPC(new Coin(*interactList[i]));
+            break;
+
+        case KILL:
+            deleteFromList(i, interactList, interactSize);
+            i--;
+            break; 
 
         case NOTHING:
             return;
@@ -200,9 +206,6 @@ void m4rkrly::Level::moveNPC(NPC* npc)
             npc->changeDirection();
         }
     }
-    // ОСТОРОЖНО ЗДЕСЬ!
-    // Если мобы стали неправильно себя вести
-    // перенеси эту функцию в if выше
     verticMoveNPC(*npc);
 }
 
@@ -268,8 +271,6 @@ bool m4rkrly::Level::verticMoveNPC(NPC& npc)
         return true;
     }
     return false;
-    //
-
 } 
 
 
@@ -348,17 +349,28 @@ void m4rkrly::Level::createLevel(int level) {
 
     switch(level)
     {
-
-        // TODO
         case 1:
             addNewBrick(new Object(20, 20, 40, 5, '#'));
             addNewInteractive(new LuckyBlock(25, 10));
             addNewNPC(new Goomba(30, 10, 0.2, 0));
-            addNewInteractive(new WinTube(65, 20, 10, 10));
+            addNewInteractive(new WinTube(70, 15, 10, 15));
             break;
         case 2:
-            break;
-        case 3:
+            addNewBrick(new Object(20, 20, 40, 5, '#'));
+
+            addNewNPC(new Goomba(21, 18, 0.4, 0));
+
+            addNewInteractive(new DestructableBrick(20, 10));
+            addNewInteractive(new LuckyBlock(25, 10));
+            addNewInteractive(new DestructableBrick(30, 10));
+            
+            addNewBrick(new Object(70, 17, 15, 8, '#'));
+
+            addNewNPC(new Goomba(70, 15, 0.3, 0));
+            
+            addNewBrick(new Object(70, 0, 15, 10, '#'));
+
+            addNewInteractive(new WinTube(100, 17, 10, 20));
             break;
     }
 }

@@ -10,7 +10,7 @@
 void m4rkrly::Map::clearMap() 
 {
     for (int i = 0; i < init::MAPWIDTH;  i++) 
-		map[0][i] = '.';
+		map[0][i] = ' ';
 	map[0][init::MAPWIDTH] = '\0';
 	for (int j = 1; j < init::MAPHEIGHT; j++)
 		sprintf(map[j], map[0]);

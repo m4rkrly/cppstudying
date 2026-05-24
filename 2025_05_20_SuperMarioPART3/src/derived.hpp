@@ -40,4 +40,11 @@ namespace m4rkrly {
             Status collisionMario(Player& mario) override;
     };
 
+    class DestructableBrick : public Interactive
+    {
+        public:
+            DestructableBrick(float x, float y);
+            Status collisionMario(Player& mario) override;
+    };
+
 }

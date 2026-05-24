@@ -40,9 +40,12 @@ Status m4rkrly::LuckyBlock::collisionMario(Player& mario)
 {
     if (texture == '?')
     {
-        if (mario.getVSpeed() < 0)
-        texture = '-';
-        return SPAWN_COIN;
+        bool collFromBottom = mario.getY() > y + height - 1;
+        if (mario.getVSpeed() < 0 && collFromBottom)
+        {
+            texture = '-';
+            return SPAWN_COIN;
+        }
     }
     return NOTHING;
 }
@@ -66,13 +69,30 @@ Status m4rkrly::Coin::collisionMario(Player& mario)
 
 
 // WINTUBE CLASS
-
 m4rkrly::WinTube::WinTube(
     float x, float y,
     float width, float height
-) : Interactive(x, y, width, height, '+') {}
+) : Interactive(x, y, width, height, '|') {}
 
 Status m4rkrly::WinTube::collisionMario(Player& mario)
 {
     return WIN;
 }
+// END OF WINTUBE CLASS
+
+
+// WINTUBE CLASS
+m4rkrly::DestructableBrick::DestructableBrick(float x, float y) 
+    : Interactive(x, y, 5, 3, '~') {}
+
+Status m4rkrly::DestructableBrick::collisionMario(Player& mario)
+{
+    bool collFromBottom = mario.getY() > y + height - 1;
+        if (mario.getVSpeed() < 0 && collFromBottom)
+        {
+            return KILL;
+        }
+    return NOTHING;
+}
+// END OF WINTUBE CLASS
+
