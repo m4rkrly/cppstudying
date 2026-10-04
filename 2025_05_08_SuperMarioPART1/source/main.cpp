@@ -52,8 +52,10 @@ void PutObjectOnMap(TObject obj) {
 int main() {
 	InitObject(&mario, 39, 10, 3, 3);
 	SetObjectPos(&mario, 20, 10);
-	ClearMap();
-	PutObjectOnMap(mario);
-	ShowMap(); 
+	do {
+		ClearMap();
+		PutObjectOnMap(mario);
+		ShowMap(); 
+	}
 	return 0;
 }
