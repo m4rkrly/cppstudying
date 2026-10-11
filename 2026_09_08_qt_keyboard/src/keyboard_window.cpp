@@ -12,9 +12,9 @@ using biv::KeyBoardWindow;
 KeyBoardWindow::KeyBoardWindow(QWidget* parent) : QWidget(parent) {
 	const int keyboard_width = 1160;
 	resize(keyboard_width, 710);
-    setWindowTitle("Грустная Клавиатура");
+    setWindowTitle("Весёлая Клавиатура");
 	
-	QPixmap pixmap("img/grustnii-smail.png");
+	QPixmap pixmap("img/veseli_smail.png");
 	QLabel* image = new QLabel(this);
 	image->setFixedSize(200, 200);
 	image->setPixmap(pixmap);
@@ -28,7 +28,7 @@ KeyBoardWindow::KeyBoardWindow(QWidget* parent) : QWidget(parent) {
 	display->setFont(QFont("Roboto", 40));
     display->setReadOnly(true);
   display->setFocusPolicy(Qt::NoFocus);
-	display->setText("Помоги мне заработать лучше...");
+	display->setText("Я работаю лучше!");
 
 	keyboard = new KeyBoard(keyboard_width);
 	connect(keyboard, &KeyBoard::key_pressed, this, &KeyBoardWindow::keyClickedEvent);

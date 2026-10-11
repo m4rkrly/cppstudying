@@ -16,7 +16,7 @@ cmake --build .
 
 if [ ! -d "$IMG_FOLDER" ]; then
   mkdir $IMG_FOLDER
-  cp ../$IMG_FOLDER/grustnii-smail.png $IMG_FOLDER
+  cp ../$IMG_FOLDER/veseli_smail.png $IMG_FOLDER
 fi
 
 cd ..
