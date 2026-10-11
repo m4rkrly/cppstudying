@@ -29,12 +29,23 @@ KeyBoardWindow::KeyBoardWindow(QWidget* parent) : QWidget(parent) {
 
 	keyboard = new KeyBoard(keyboard_width);
 
+	connect(keyboard, &KeyBoard::key_pressed, this, &KeyBoardWindow::keyClickedEvent);
+
     QVBoxLayout* main_layout = new QVBoxLayout(this);
 	main_layout->addLayout(smail_layout);
     main_layout->addWidget(display);
     main_layout->addWidget(keyboard);
 }
 
+void KeyBoardWindow::keyClickedEvent(const int code) {
+	if (keyboard->is_key_allowed(code)) {
+		display->setText(display->text() + keyboard->get_key_text(code));
+		//keyboard->animate_button(code);
+	}
+}
+
+// (DEV) - Здесь он реагирует только на событие нажатия кнопки на клавиатуре
+// Нужно сделать так, чтобы он реагировал на нажатие на кнопку
 void KeyBoardWindow::keyPressEvent(QKeyEvent* event) {
 	const int key = event->nativeVirtualKey();
 	if (keyboard->is_key_allowed(key)) {

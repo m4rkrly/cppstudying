@@ -2,6 +2,7 @@
 
 using biv::KeyBoard;
 
+// (DEV) Конструктрр не связан с виджетом-родителем KeyboardWindow
 KeyBoard::KeyBoard(const int width, QWidget* parent) 
 	: button_width(width / 29), QWidget(parent) {
 
@@ -77,9 +78,14 @@ void KeyBoard::create_buttons(
 	for (int i = 0; i < data.size(); i++) {
         KeyBoardButton* btn = new KeyBoardButton(data[i].text);
 		btn->setMinimumSize(button_width, button_width);
+	
+		const int code = data[i].code;
+		connect(btn, &QPushButton::clicked, this, [this, code]() {
+			emit key_pressed(code);
+		});
         
 		layout->addWidget(btn, line, i * 2 + start_position, 2, 2);
 		
-		buttons[data[i].code] = btn;
+		buttons[code] = btn;
 	}
 }

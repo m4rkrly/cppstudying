@@ -31,12 +31,12 @@ std::vector<KeyData> KeyBoardData::get_line4() const {
 }
 
 bool KeyBoardData::is_key_allowed(const int code) const noexcept {
-	if (code < 65) {
+	if ((code < 48) or ((code > 57) and (code < 65))) {
 		return false;
 	}
 	
 	if (code > 90) {
-		static const int russian_addition[] = {186, 188, 190, 192, 219, 221, 222};
+		static const int russian_addition[] = {186, 188, 190, 191, 192, 219, 221, 222};
 		for (const int value: russian_addition) {
 			if (code == value) {
 				return true;
