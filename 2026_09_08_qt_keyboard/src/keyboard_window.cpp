@@ -5,6 +5,8 @@
 #include <QPixmap>
 #include <QVBoxLayout>
 
+#include <iostream>
+
 using biv::KeyBoardWindow;
 
 KeyBoardWindow::KeyBoardWindow(QWidget* parent) : QWidget(parent) {
@@ -25,10 +27,10 @@ KeyBoardWindow::KeyBoardWindow(QWidget* parent) : QWidget(parent) {
 	display->setMinimumHeight(80);
 	display->setFont(QFont("Roboto", 40));
     display->setReadOnly(true);
+  display->setFocusPolicy(Qt::NoFocus);
 	display->setText("Помоги мне заработать лучше...");
 
 	keyboard = new KeyBoard(keyboard_width);
-
 	connect(keyboard, &KeyBoard::key_pressed, this, &KeyBoardWindow::keyClickedEvent);
 
     QVBoxLayout* main_layout = new QVBoxLayout(this);
@@ -37,19 +39,31 @@ KeyBoardWindow::KeyBoardWindow(QWidget* parent) : QWidget(parent) {
     main_layout->addWidget(keyboard);
 }
 
-void KeyBoardWindow::keyClickedEvent(const int code) {
-	if (keyboard->is_key_allowed(code)) {
-		display->setText(display->text() + keyboard->get_key_text(code));
-		//keyboard->animate_button(code);
+void KeyBoardWindow::keyClickedEvent(const int key) {
+	handle_key_interaction(key);
+}
+
+
+void KeyBoardWindow::handle_key_interaction(const int key) {
+	if (keyboard->is_key_allowed(key)) {
+		QString text = display->text();
+		if (key == 16777220) {
+			display->setText("");
+			return;
+		} else if (key == Qt::Key_Space) {
+			display->setText(text + " ");
+			return;
+		} else if (key == Qt::Key_Backspace) {
+			text.chop(1);
+			display->setText(text);
+			return;
+		}
+		display->setText(display->text() + keyboard->get_key_text(key));
 	}
 }
 
-// (DEV) - Здесь он реагирует только на событие нажатия кнопки на клавиатуре
-// Нужно сделать так, чтобы он реагировал на нажатие на кнопку
+
 void KeyBoardWindow::keyPressEvent(QKeyEvent* event) {
-	const int key = event->nativeVirtualKey();
-	if (keyboard->is_key_allowed(key)) {
-		display->setText(display->text() + keyboard->get_key_text(key));
-		keyboard->animate_button(key);
-	}
+	const int key = event->key();
+	handle_key_interaction(key);
 }

@@ -22,6 +22,7 @@ namespace biv {
 			void keyClickedEvent(int code);
 			
 		protected:
+			void handle_key_interaction(const int code);
 			void keyPressEvent(QKeyEvent* event) override;
 	};
 }
